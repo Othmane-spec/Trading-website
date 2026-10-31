@@ -1,0 +1,19 @@
+/* Scene canvas styles — kept minimal */
+.hero-art canvas {
+  position: absolute !important;
+  inset: 0;
+  width: 100% !important;
+  height: 100% !important;
+  z-index: 1;
+}
+
+.hero-art .scene-fallback {
+  position: absolute;
+  inset: 14%;
+  background: var(--panel);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-art canvas { display: none; }
+  .hero-art .scene-fallback { display: block; }
+}
