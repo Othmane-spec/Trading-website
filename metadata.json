@@ -1,0 +1,6 @@
+{
+  "name": "PRINTFOREX",
+  "description": "A considered trading community for market education, structured analysis, and risk-aware decisions.",
+  "prompt": "Trading website imported from Othmane-spec/Trading-website",
+  "capabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
