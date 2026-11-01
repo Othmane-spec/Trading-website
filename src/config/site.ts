@@ -4,6 +4,10 @@ export const site = {
   logo: { mark: "ring", type: "typographic" },
   description: "A considered trading community for market education, structured analysis, and risk-aware decisions.",
   contact: "hello@printforex.com",
+  whatsapp: {
+    phoneNumber: "+1234567890", // Replace with your actual WhatsApp phone number including country code (e.g. +33612345678 or +12025550192)
+    message: "Hello PRINTFOREX, I would like to learn more about your community and trading education programs.",
+  },
   social: { instagram: "#", x: "#", linkedin: "#" },
   languages: ["en"],
   primaryCta: { label: "Join Our Community", href: "#join" },
