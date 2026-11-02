@@ -1,0 +1,1166 @@
+<!DOCTYPE html>
+
+<html class="scroll-smooth" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>PRINTFOREX — Trading Education &amp; Community | Think Beyond the Market</title>
+<!-- Inter & Space Grotesk Google Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;family=Space+Grotesk:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS v3 with Plugins -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              void: '#05070A',
+              dark: '#080C13',
+              card: '#0D131F',
+              elevated: '#121A2A',
+              border: '#1F293D',
+              gold: '#D4AF37',
+              goldLight: '#F3E5AB',
+              goldDark: '#997A15',
+              goldMuted: 'rgba(212, 175, 55, 0.15)',
+              success: '#10B981',
+              slateText: '#94A3B8'
+            }
+          },
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+            display: ['Space Grotesk', 'sans-serif']
+          },
+          boxShadow: {
+            'gold-glow': '0 0 35px -5px rgba(212, 175, 55, 0.25)',
+            'gold-sm': '0 0 15px -3px rgba(212, 175, 55, 0.3)'
+          }
+        }
+      }
+    }
+  </script>
+<style data-purpose="custom-decorations">
+    /* Subtle background grid pattern */
+    .bg-grid-pattern {
+      background-size: 40px 40px;
+      background-image: 
+        linear-gradient(to right, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+    }
+    .gold-gradient-text {
+      background: linear-gradient(135deg, #FFF0CA 0%, #D4AF37 50%, #AA820A 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .gold-gradient-bg {
+      background: linear-gradient(135deg, #F3E5AB 0%, #D4AF37 60%, #B8860B 100%);
+    }
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 6px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: #080C13;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: #1F293D;
+      border-radius: 9999px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+      background: #D4AF37;
+    }
+  </style>
+</head>
+<body class="bg-brand-void text-[#F5F5F2] font-sans antialiased selection:bg-brand-gold selection:text-black overflow-x-hidden custom-scrollbar">
+<!-- BEGIN: StickyNavBar -->
+<header class="sticky top-0 z-40 w-full backdrop-blur-xl bg-brand-void/85 border-b border-brand-border/60 transition-all duration-300" data-purpose="site-navigation">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+<!-- Brand Logo -->
+<a aria-label="PRINTFOREX Home" class="flex items-center gap-3 group" href="#">
+<!-- Golden trending graphic mark -->
+<div class="w-10 h-10 rounded-xl bg-gradient-to-br from-brand-elevated to-brand-card border border-brand-gold/40 flex items-center justify-center p-2 shadow-gold-sm group-hover:border-brand-gold transition duration-300">
+<svg class="w-full h-full text-brand-gold" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2" viewbox="0 0 24 24">
+<polyline points="22 7 13.5 15.5 8.5 10.5 2 17"></polyline>
+<polyline points="16 7 22 7 22 13"></polyline>
+</svg>
+</div>
+<div class="flex flex-col">
+<span class="font-display font-bold text-lg sm:text-xl tracking-wider text-white flex items-center gap-1.5">
+            PRINT<span class="text-brand-gold">FOREX</span>
+</span>
+<span class="text-[10px] tracking-widest uppercase text-brand-slateText font-medium">Trading Education &amp; Community</span>
+</div>
+</a>
+<!-- Desktop Navigation Menu -->
+<nav aria-label="Main Links" class="hidden md:flex items-center space-x-7 text-sm font-medium text-brand-slateText">
+<a class="hover:text-brand-gold transition-colors duration-200" href="#about">About</a>
+<a class="hover:text-brand-gold transition-colors duration-200" href="#philosophy">Philosophy</a>
+<a class="hover:text-brand-gold transition-colors duration-200" href="#services">Services</a>
+<a class="hover:text-brand-gold transition-colors duration-200" href="#methodology">Methodology</a>
+<a class="hover:text-brand-gold transition-colors duration-200" href="#community">Community</a>
+<a class="hover:text-brand-gold transition-colors duration-200" href="#faq">FAQ</a>
+</nav>
+<!-- Primary Action CTA -->
+<div class="flex items-center gap-4">
+<button aria-label="Join PRINTFOREX Community Modal" class="relative group overflow-hidden rounded-full p-[1px] focus:outline-none focus:ring-2 focus:ring-brand-gold/60 active:scale-95 transition-transform" onclick="openModal()">
+<span class="absolute inset-0 bg-gradient-to-r from-brand-goldLight via-brand-gold to-brand-goldDark transition-all duration-300"></span>
+<span class="relative px-5 py-2.5 rounded-full bg-brand-void text-xs sm:text-sm font-semibold text-brand-goldLight flex items-center gap-2 group-hover:bg-opacity-0 group-hover:text-black transition-all duration-300">
+<span>Join Our Community</span>
+<svg class="w-4 h-4 transition-transform group-hover:translate-x-0.5" fill="none" stroke="currentColor" viewbox="0 0 24 24">
+<path d="M14 5l7 7m0 0l-7 7m7-7H3" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path>
+</svg>
+</span>
+</button>
+</div>
+</div>
+</header>
+<!-- END: StickyNavBar -->
+<main>
+<!-- BEGIN: HeroSection -->
+<section class="relative min-h-[92vh] flex items-center justify-center overflow-hidden py-16 lg:py-24 bg-grid-pattern" data-purpose="hero-experience" id="hero">
+<!-- Ambient Lighting Blooms -->
+<div class="absolute -top-40 left-1/2 -translate-x-1/2 w-[650px] h-[500px] bg-brand-gold/10 rounded-full blur-[140px] pointer-events-none"></div>
+<div class="absolute bottom-10 right-10 w-96 h-96 bg-blue-500/5 rounded-full blur-[120px] pointer-events-none"></div>
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 w-full">
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
+<!-- Hero Left Column: Narrative Content -->
+<div class="lg:col-span-7 flex flex-col items-start text-left space-y-7">
+<!-- Eyebrow Badge -->
+<div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-brand-card/90 border border-brand-gold/30 shadow-sm backdrop-blur-md">
+<span class="w-2 h-2 rounded-full bg-brand-gold animate-ping"></span>
+<span class="text-xs uppercase font-semibold tracking-wider text-brand-goldLight">Discipline · Knowledge · Strategy</span>
+</div>
+<!-- Big Headline -->
+<h1 class="font-display text-4xl sm:text-6xl lg:text-7xl font-bold tracking-tight text-white leading-[1.08]">
+              Think Beyond <br class="hidden sm:block"/>
+<span class="gold-gradient-text">The Market.</span>
+</h1>
+<!-- Subtitle -->
+<p class="text-base sm:text-lg text-brand-slateText max-w-xl font-normal leading-relaxed">
+              A premier trading ecosystem built on institutional market structure, rigorous risk awareness, and continuous education. Stop chasing noise; master execution.
+            </p>
+<!-- CTA Cluster -->
+<div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 w-full sm:w-auto pt-2">
+<button class="px-7 py-4 rounded-xl gold-gradient-bg text-black font-semibold text-sm sm:text-base flex items-center justify-center gap-2.5 shadow-gold-glow hover:brightness-110 active:scale-98 transition duration-200" onclick="openModal()">
+<span>Join Our Community</span>
+<svg class="w-4 h-4 text-black" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M17 8l4 4m0 0l-4 4m4-4H3" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.2"></path></svg>
+</button>
+<a class="px-7 py-4 rounded-xl bg-brand-card/80 hover:bg-brand-elevated border border-brand-border hover:border-brand-gold/40 text-brand-slateText hover:text-white font-medium text-sm sm:text-base flex items-center justify-center gap-2 transition duration-200" href="#services">
+<span>Explore Our Services</span>
+</a>
+</div>
+<!-- Trust Badge Line -->
+<div class="pt-4 flex flex-wrap items-center gap-6 text-xs text-brand-slateText border-t border-brand-border/40 w-full">
+<div class="flex items-center gap-2">
+<svg class="w-4 h-4 text-brand-gold" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+<span>Strict Risk Management Focus</span>
+</div>
+<div class="flex items-center gap-2">
+<svg class="w-4 h-4 text-brand-success" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+<span>Daily Institutional Technicals</span>
+</div>
+<div class="flex items-center gap-2">
+<svg class="w-4 h-4 text-brand-gold" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+<span>Interactive Telegram Support</span>
+</div>
+</div>
+</div>
+<!-- Hero Right Column: 3D Market Visual Sculpture -->
+<div class="lg:col-span-5 relative flex justify-center">
+<!-- Glow Aura -->
+<div class="absolute inset-0 bg-gradient-to-tr from-brand-gold/15 to-transparent rounded-3xl filter blur-2xl -z-10"></div>
+<div class="w-full max-w-md rounded-2xl bg-gradient-to-b from-brand-card to-brand-dark p-6 border border-brand-border/80 shadow-2xl relative overflow-hidden backdrop-blur-sm">
+<!-- Golden Corner Accent -->
+<div class="absolute top-0 right-0 w-32 h-32 bg-brand-gold/10 rounded-full blur-xl pointer-events-none"></div>
+<!-- Terminal Header -->
+<div class="flex items-center justify-between pb-4 mb-4 border-b border-brand-border/60">
+<div class="flex items-center gap-2">
+<span class="w-3 h-3 rounded-full bg-red-500/80 inline-block"></span>
+<span class="w-3 h-3 rounded-full bg-amber-500/80 inline-block"></span>
+<span class="w-3 h-3 rounded-full bg-emerald-500/80 inline-block"></span>
+<span class="ml-2 font-mono text-xs text-brand-slateText">PRINT_MARKET_RADAR // EURUSD</span>
+</div>
+<span class="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-mono bg-brand-success/15 text-brand-success font-semibold">
+                  LIVE SETUP
+                </span>
+</div>
+<!-- Visual Simulated Market Candlestick & Bull Representation -->
+<div class="relative py-4 flex flex-col gap-4">
+<!-- Bull Silhouette & Golden Stat Banner -->
+<div class="relative rounded-xl p-4 bg-gradient-to-r from-brand-elevated to-brand-card border border-brand-gold/20 flex items-center justify-between">
+<div class="flex items-center gap-3">
+<div class="w-12 h-12 rounded-lg bg-brand-goldMuted border border-brand-gold/40 flex items-center justify-center">
+<svg class="w-7 h-7 text-brand-gold" fill="currentColor" viewbox="0 0 24 24">
+<path d="M19 5h-2V3h-2v2H9V3H7v2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H5V9h14v12zM7 11h5v5H7z"></path>
+</svg>
+</div>
+<div>
+<div class="text-xs text-brand-slateText uppercase tracking-wider font-semibold">Bullish Invalidation</div>
+<div class="text-lg font-bold font-mono text-brand-goldLight">1.08420 → 1.09650</div>
+</div>
+</div>
+<span class="text-xs font-mono font-bold text-brand-success bg-brand-success/10 px-2.5 py-1 rounded">R:R 1:3.4</span>
+</div>
+<!-- Simulation Visual Chart Grid -->
+<div class="h-44 w-full bg-brand-void/80 rounded-xl p-3 border border-brand-border/60 flex flex-col justify-between relative overflow-hidden font-mono text-[10px]">
+<!-- Horizontal price lines -->
+<div class="absolute inset-x-0 top-1/4 border-b border-dashed border-brand-border/40 flex justify-end pr-2 text-brand-slateText/60">1.09400 (TP2)</div>
+<div class="absolute inset-x-0 top-1/2 border-b border-dashed border-brand-gold/30 flex justify-end pr-2 text-brand-gold/80">1.08950 (OB Zone)</div>
+<div class="absolute inset-x-0 bottom-6 border-b border-dashed border-red-500/30 flex justify-end pr-2 text-red-400/70">1.08380 (SL)</div>
+<!-- Candlesticks simulation SVG -->
+<svg class="w-full h-full z-10" preserveaspectratio="none" viewbox="0 0 280 120">
+<!-- Candles -->
+<line stroke="#334155" stroke-width="1.5" x1="20" x2="20" y1="90" y2="40"></line>
+<rect fill="#EF4444" height="25" rx="1" width="6" x="17" y="55"></rect>
+<line stroke="#334155" stroke-width="1.5" x1="50" x2="50" y1="85" y2="35"></line>
+<rect fill="#10B981" height="15" rx="1" width="6" x="47" y="60"></rect>
+<line stroke="#334155" stroke-width="1.5" x1="80" x2="80" y1="95" y2="60"></line>
+<rect fill="#EF4444" height="20" rx="1" width="6" x="77" y="70"></rect>
+<!-- Liquidity Sweep Wick -->
+<line stroke="#D4AF37" stroke-width="1.5" x1="110" x2="110" y1="108" y2="50"></line>
+<rect fill="#10B981" height="30" rx="1" width="6" x="107" y="65"></rect>
+<!-- Expansion impulses -->
+<line stroke="#D4AF37" stroke-width="1.5" x1="140" x2="140" y1="80" y2="35"></line>
+<rect fill="#10B981" height="30" rx="1" width="6" x="137" y="40"></rect>
+<line stroke="#D4AF37" stroke-width="1.5" x1="170" x2="170" y1="65" y2="25"></line>
+<rect fill="#10B981" height="25" rx="1" width="6" x="167" y="30"></rect>
+<line stroke="#334155" stroke-width="1.5" x1="200" x2="200" y1="50" y2="20"></line>
+<rect fill="#EF4444" height="12" rx="1" width="6" x="197" y="32"></rect>
+<line stroke="#D4AF37" stroke-width="1.5" x1="230" x2="230" y1="45" y2="10"></line>
+<rect fill="#10B981" height="22" rx="1" width="6" x="227" y="15"></rect>
+<!-- Target trend line -->
+<path d="M 20 75 Q 110 110, 230 20" fill="none" stroke="#D4AF37" stroke-dasharray="3,3" stroke-width="1.5"></path>
+</svg>
+</div>
+<!-- Live Metrics Footer -->
+<div class="grid grid-cols-3 gap-2 text-center pt-1 font-mono">
+<div class="p-2 rounded-lg bg-brand-void/60 border border-brand-border/40">
+<span class="block text-[10px] text-brand-slateText">SESSION</span>
+<span class="text-xs font-semibold text-white">London / NY</span>
+</div>
+<div class="p-2 rounded-lg bg-brand-void/60 border border-brand-border/40">
+<span class="block text-[10px] text-brand-slateText">BIAS</span>
+<span class="text-xs font-semibold text-brand-success">High Liquidity</span>
+</div>
+<div class="p-2 rounded-lg bg-brand-void/60 border border-brand-border/40">
+<span class="block text-[10px] text-brand-slateText">FRAME</span>
+<span class="text-xs font-semibold text-brand-goldLight">H4 Institutional</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- END: HeroSection -->
+<!-- BEGIN: BrandPhilosophySection -->
+<section class="py-20 lg:py-28 bg-brand-dark/60 border-t border-brand-border/50 relative" data-purpose="brand-philosophy" id="philosophy">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<!-- Header Section -->
+<div class="text-center max-w-3xl mx-auto mb-16">
+<span class="text-xs font-semibold tracking-widest text-brand-gold uppercase">Our Philosophy</span>
+<h2 class="font-display text-3xl sm:text-4xl lg:text-5xl font-bold text-white mt-3">
+            Trading is a process, not a shortcut.
+          </h2>
+<p class="mt-4 text-brand-slateText text-base sm:text-lg">
+            At PRINTFOREX, we believe that understanding the markets, building disciplined daily habits, and prioritizing risk management are the fundamental pillars of consistent, long-term mastery.
+          </p>
+</div>
+<!-- 3 Core Principles Grid -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+<!-- Pillar 1 -->
+<div class="p-8 rounded-2xl bg-brand-card/70 border border-brand-border hover:border-brand-gold/40 transition duration-300 relative group flex flex-col justify-between">
+<div>
+<div class="text-4xl font-display font-bold text-brand-gold/40 group-hover:text-brand-gold transition duration-300 mb-6">01</div>
+<h3 class="font-display text-xl font-bold text-white mb-3">Education First</h3>
+<p class="text-sm text-brand-slateText leading-relaxed">
+                Before risking capital, understand mechanics. We break down market structure, liquidity voids, and institutional psychology so you make informed, confident choices.
+              </p>
+</div>
+<div class="mt-6 pt-4 border-t border-brand-border/50 flex items-center text-xs text-brand-goldLight font-medium">
+<span>Foundation over speculation</span>
+</div>
+</div>
+<!-- Pillar 2 -->
+<div class="p-8 rounded-2xl bg-brand-card/70 border border-brand-border hover:border-brand-gold/40 transition duration-300 relative group flex flex-col justify-between">
+<div>
+<div class="text-4xl font-display font-bold text-brand-gold/40 group-hover:text-brand-gold transition duration-300 mb-6">02</div>
+<h3 class="font-display text-xl font-bold text-white mb-3">Methodical Discipline</h3>
+<p class="text-sm text-brand-slateText leading-relaxed">
+                A system is useless without the execution discipline to follow it. We emphasize emotional detachment, clear trade journals, and systematic consistency over impulsive hype.
+              </p>
+</div>
+<div class="mt-6 pt-4 border-t border-brand-border/50 flex items-center text-xs text-brand-goldLight font-medium">
+<span>Plan the trade, trade the plan</span>
+</div>
+</div>
+<!-- Pillar 3 -->
+<div class="p-8 rounded-2xl bg-brand-card/70 border border-brand-border hover:border-brand-gold/40 transition duration-300 relative group flex flex-col justify-between">
+<div>
+<div class="text-4xl font-display font-bold text-brand-gold/40 group-hover:text-brand-gold transition duration-300 mb-6">03</div>
+<h3 class="font-display text-xl font-bold text-white mb-3">Capital Preservation</h3>
+<p class="text-sm text-brand-slateText leading-relaxed">
+                Longevity is the true competitive edge in Forex. We prioritize asymmetric risk-to-reward ratios, portfolio defense protocols, and strict drawdown controls before offense.
+              </p>
+</div>
+<div class="mt-6 pt-4 border-t border-brand-border/50 flex items-center text-xs text-brand-goldLight font-medium">
+<span>Protect capital at all times</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- END: BrandPhilosophySection -->
+<!-- BEGIN: ServicesSection -->
+<section class="py-20 lg:py-28 relative bg-brand-void" data-purpose="services-showcase" id="services">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<div class="flex flex-col md:flex-row md:items-end justify-between mb-16">
+<div>
+<span class="text-xs font-semibold tracking-widest text-brand-gold uppercase">What We Offer</span>
+<h2 class="font-display text-3xl sm:text-4xl lg:text-5xl font-bold text-white mt-2">
+              Everything starts with knowledge.
+            </h2>
+</div>
+<p class="mt-4 md:mt-0 text-brand-slateText max-w-md text-sm sm:text-base">
+            Structured services built to elevate market comprehension from initial foundations to advanced institutional trade execution.
+          </p>
+</div>
+<!-- 4-Card Service Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+<!-- Card 1: Trading Education -->
+<div class="rounded-2xl p-6 bg-brand-card/90 border border-brand-border hover:border-brand-gold/50 transition-all duration-300 flex flex-col justify-between group">
+<div>
+<div class="w-12 h-12 rounded-xl bg-brand-goldMuted border border-brand-gold/30 flex items-center justify-center mb-6 text-brand-gold">
+<!-- Academic / Cap icon -->
+<svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M12 14l9-5-9-5-9 5 9 5zm0 0l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-5.824-1.998 12.078 12.078 0 01.665-6.479L12 14zm-4 6v-7.5" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</div>
+<h3 class="font-display text-lg font-bold text-white mb-2">Trading Education</h3>
+<p class="text-xs sm:text-sm text-brand-slateText leading-relaxed mb-4">
+                Structured modules starting from market fundamentals, forex mechanics, price action reading, and smart money concepts.
+              </p>
+<ul class="space-y-2 text-xs text-brand-slateText/90 mb-6 font-mono">
+<li class="flex items-center gap-1.5"><span class="text-brand-gold">✓</span> Complete beginner to pro track</li>
+<li class="flex items-center gap-1.5"><span class="text-brand-gold">✓</span> Institutional orderflow dynamics</li>
+</ul>
+</div>
+<button class="w-full py-2.5 rounded-lg border border-brand-border text-xs font-semibold text-brand-gold hover:bg-brand-gold/10 transition" onclick="openModal()">
+              Explore Syllabus →
+            </button>
+</div>
+<!-- Card 2: Market Analysis -->
+<div class="rounded-2xl p-6 bg-brand-card/90 border border-brand-border hover:border-brand-gold/50 transition-all duration-300 flex flex-col justify-between group">
+<div>
+<div class="w-12 h-12 rounded-xl bg-brand-goldMuted border border-brand-gold/30 flex items-center justify-center mb-6 text-brand-gold">
+<!-- Trend/Chart icon -->
+<svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</div>
+<h3 class="font-display text-lg font-bold text-white mb-2">Market Analysis</h3>
+<p class="text-xs sm:text-sm text-brand-slateText leading-relaxed mb-4">
+                Daily and weekly institutional markups across major currency pairs, indices, and gold with macroeconomic context.
+              </p>
+<ul class="space-y-2 text-xs text-brand-slateText/90 mb-6 font-mono">
+<li class="flex items-center gap-1.5"><span class="text-brand-gold">✓</span> Daily London / NY open briefings</li>
+<li class="flex items-center gap-1.5"><span class="text-brand-gold">✓</span> Key liquidity pool mappings</li>
+</ul>
+</div>
+<button class="w-full py-2.5 rounded-lg border border-brand-border text-xs font-semibold text-brand-gold hover:bg-brand-gold/10 transition" onclick="openModal()">
+              Sample Breakdown →
+            </button>
+</div>
+<!-- Card 3: Trading Signals -->
+<div class="rounded-2xl p-6 bg-brand-card/90 border border-brand-border hover:border-brand-gold/50 transition-all duration-300 flex flex-col justify-between group">
+<div>
+<div class="w-12 h-12 rounded-xl bg-brand-goldMuted border border-brand-gold/30 flex items-center justify-center mb-6 text-brand-gold">
+<!-- Signal Radar icon -->
+<svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M13 10V3L4 14h7v7l9-11h-7z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</div>
+<h3 class="font-display text-lg font-bold text-white mb-2">High-Conviction Signals</h3>
+<p class="text-xs sm:text-sm text-brand-slateText leading-relaxed mb-4">
+                Curated opportunities delivered directly via Telegram with exact entry conditions, stop losses, and multi-tier take profits.
+              </p>
+<ul class="space-y-2 text-xs text-brand-slateText/90 mb-6 font-mono">
+<li class="flex items-center gap-1.5"><span class="text-brand-gold">✓</span> Precise entry &amp; invalidation</li>
+<li class="flex items-center gap-1.5"><span class="text-brand-gold">✓</span> Live execution alerts</li>
+</ul>
+</div>
+<button class="w-full py-2.5 rounded-lg border border-brand-border text-xs font-semibold text-brand-gold hover:bg-brand-gold/10 transition" onclick="openModal()">
+              Signal Protocol →
+            </button>
+</div>
+<!-- Card 4: Risk Management -->
+<div class="rounded-2xl p-6 bg-brand-card/90 border border-brand-border hover:border-brand-gold/50 transition-all duration-300 flex flex-col justify-between group">
+<div>
+<div class="w-12 h-12 rounded-xl bg-brand-goldMuted border border-brand-gold/30 flex items-center justify-center mb-6 text-brand-gold">
+<!-- Shield icon -->
+<svg class="w-6 h-6" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</div>
+<h3 class="font-display text-lg font-bold text-white mb-2">Risk Management</h3>
+<p class="text-xs sm:text-sm text-brand-slateText leading-relaxed mb-4">
+                Frameworks designed to shield trading balance against volatile market drawdowns with mathematical precision.
+              </p>
+<ul class="space-y-2 text-xs text-brand-slateText/90 mb-6 font-mono">
+<li class="flex items-center gap-1.5"><span class="text-brand-gold">✓</span> Position sizing formulas</li>
+<li class="flex items-center gap-1.5"><span class="text-brand-gold">✓</span> Maximum drawdown safeguards</li>
+</ul>
+</div>
+<button class="w-full py-2.5 rounded-lg border border-brand-border text-xs font-semibold text-brand-gold hover:bg-brand-gold/10 transition" onclick="openModal()">
+              Risk Framework →
+            </button>
+</div>
+</div>
+</div>
+</section>
+<!-- END: ServicesSection -->
+<!-- BEGIN: MarketAnalysisExperience -->
+<section class="py-20 bg-brand-card/30 border-y border-brand-border/60" data-purpose="market-analysis-demo">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<div class="text-center max-w-2xl mx-auto mb-12">
+<span class="text-xs font-semibold tracking-widest text-brand-gold uppercase">Actionable Intel</span>
+<h2 class="font-display text-3xl sm:text-4xl font-bold text-white mt-2">
+            Understand the Market Beyond the Numbers.
+          </h2>
+<p class="text-xs sm:text-sm text-brand-slateText mt-3">
+            Illustrative market breakdown — structured analysis identifying high-probability institutional footprints.
+          </p>
+</div>
+<!-- Analytical Terminal Container -->
+<div class="rounded-2xl bg-brand-void border border-brand-border overflow-hidden shadow-2xl">
+<!-- Terminal Toolbar -->
+<div class="bg-brand-dark px-6 py-4 border-b border-brand-border flex flex-wrap items-center justify-between gap-4">
+<div class="flex items-center gap-4">
+<span class="font-mono text-sm font-bold text-white">XAUUSD / GOLD</span>
+<span class="text-xs px-2 py-0.5 rounded bg-brand-gold/20 text-brand-goldLight font-mono">TIMEFRAME: H1 / M15</span>
+<span class="text-xs text-brand-slateText font-mono hidden sm:inline">TREND: BULLISH BIAS</span>
+</div>
+<div class="flex items-center gap-3 text-xs font-mono">
+<span class="text-brand-slateText">Fair Value Gap [FVG]: <strong class="text-brand-gold">ACTIVE</strong></span>
+<span class="w-2 h-2 rounded-full bg-brand-success animate-pulse"></span>
+</div>
+</div>
+<!-- Deep Chart Anatomy Visualization -->
+<div class="p-6 lg:p-8 grid grid-cols-1 lg:grid-cols-3 gap-6 items-center">
+<div class="lg:col-span-2 space-y-4">
+<div class="bg-brand-dark/80 rounded-xl p-5 border border-brand-border/70 relative">
+<div class="flex justify-between items-center text-xs font-mono text-brand-slateText mb-4">
+<span>SWING ANALYSIS (LONDON HIGH SWEEP)</span>
+<span class="text-brand-goldLight font-bold">2,384.40 → 2,418.00</span>
+</div>
+<!-- Graphic representation -->
+<div class="h-56 relative bg-brand-card/40 rounded-lg p-3 border border-brand-border/40 overflow-hidden flex items-center justify-center">
+<!-- Candlesticks & Liquidity graphics -->
+<div class="absolute inset-0 flex items-center justify-between px-6 opacity-80">
+<div class="w-12 h-32 border-l border-r border-brand-gold/40 bg-brand-gold/5 flex flex-col justify-center items-center text-[10px] font-mono text-brand-gold">
+<span>ORDER</span>
+<span>BLOCK</span>
+</div>
+<div class="h-[1px] w-full bg-gradient-to-r from-transparent via-brand-gold to-transparent opacity-60"></div>
+<div class="w-20 h-24 border border-brand-success/50 bg-brand-success/10 rounded flex items-center justify-center text-[10px] font-mono text-brand-success text-center px-1">
+                      TARGET LIQUIDITY
+                    </div>
+</div>
+<div class="z-10 text-center">
+<span class="text-xs font-mono uppercase bg-brand-void/90 px-3 py-1.5 rounded-full border border-brand-border text-brand-slateText">
+                      Clean Liquidity Sweep + Institutional Rejection
+                    </span>
+</div>
+</div>
+<div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-4 text-xs font-mono">
+<div class="p-2.5 rounded bg-brand-void border border-brand-border/50">
+<span class="text-brand-slateText block text-[10px]">ENTRY ZONE</span>
+<span class="font-bold text-white">2,392.20</span>
+</div>
+<div class="p-2.5 rounded bg-brand-void border border-brand-border/50">
+<span class="text-brand-slateText block text-[10px]">INVALIDATION (SL)</span>
+<span class="font-bold text-red-400">2,386.50</span>
+</div>
+<div class="p-2.5 rounded bg-brand-void border border-brand-border/50">
+<span class="text-brand-slateText block text-[10px]">FIRST TARGET</span>
+<span class="font-bold text-brand-success">2,408.00</span>
+</div>
+<div class="p-2.5 rounded bg-brand-void border border-brand-border/50">
+<span class="text-brand-slateText block text-[10px]">FINAL TARGET</span>
+<span class="font-bold text-brand-goldLight">2,424.00</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Analysis Commentary Column -->
+<div class="bg-brand-dark/90 p-6 rounded-xl border border-brand-border space-y-4">
+<h4 class="font-display font-bold text-white text-base">Key Technical Takeaway</h4>
+<p class="text-xs text-brand-slateText leading-relaxed">
+                Liquidity resting above previous Asian session highs was swept cleanly during pre-London volatility. Price mitigated the 62% Fibonacci discount zone with immediate institutional reaction.
+              </p>
+<div class="space-y-2 pt-2 border-t border-brand-border/60 text-xs">
+<div class="flex items-center justify-between text-brand-slateText">
+<span>Confluence Score:</span>
+<span class="font-bold text-brand-gold">9.2 / 10</span>
+</div>
+<div class="flex items-center justify-between text-brand-slateText">
+<span>Calculated Risk:</span>
+<span class="font-bold text-white">1% Portfolio Default</span>
+</div>
+<div class="flex items-center justify-between text-brand-slateText">
+<span>Execution Channel:</span>
+<span class="font-bold text-brand-goldLight">PRINTFOREX Telegram</span>
+</div>
+</div>
+<button class="w-full mt-4 py-3 rounded-lg gold-gradient-bg text-black font-semibold text-xs text-center shadow-gold-sm hover:brightness-105 transition" onclick="openModal()">
+                Access Daily Full Analysis
+              </button>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- END: MarketAnalysisExperience -->
+<!-- BEGIN: MethodologySection -->
+<section class="py-20 lg:py-28 bg-brand-dark/40" data-purpose="trading-methodology" id="methodology">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<div class="text-center max-w-2xl mx-auto mb-16">
+<span class="text-xs font-semibold tracking-widest text-brand-gold uppercase">Methodology</span>
+<h2 class="font-display text-3xl sm:text-4xl lg:text-5xl font-bold text-white mt-2">
+            A structured approach to trading.
+          </h2>
+<p class="mt-3 text-brand-slateText text-sm sm:text-base">
+            From first principles to routine execution, every member follows a clear, repeatable 4-phase framework.
+          </p>
+</div>
+<!-- 4 Step Interactive Timeline -->
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 relative">
+<!-- Step 1 -->
+<div class="p-6 rounded-2xl bg-brand-card border border-brand-border hover:border-brand-gold/40 transition duration-300 relative group flex flex-col justify-between">
+<div>
+<div class="flex items-center justify-between mb-4">
+<span class="w-8 h-8 rounded-full bg-brand-gold/20 border border-brand-gold text-brand-gold font-mono text-xs font-bold flex items-center justify-center">01</span>
+<span class="text-[10px] uppercase font-mono tracking-wider text-brand-slateText">Phase 1</span>
+</div>
+<h3 class="font-display text-lg font-bold text-white mb-2">Learn</h3>
+<p class="text-xs sm:text-sm text-brand-slateText leading-relaxed">
+                Build an institutional foundation. Master terminology, pip calculus, order types, currency correlation, and market participants.
+              </p>
+</div>
+<div class="mt-6 pt-3 border-t border-brand-border/40 text-[11px] font-mono text-brand-gold">
+              Knowledge Acquisition →
+            </div>
+</div>
+<!-- Step 2 -->
+<div class="p-6 rounded-2xl bg-brand-card border border-brand-border hover:border-brand-gold/40 transition duration-300 relative group flex flex-col justify-between">
+<div>
+<div class="flex items-center justify-between mb-4">
+<span class="w-8 h-8 rounded-full bg-brand-gold/20 border border-brand-gold text-brand-gold font-mono text-xs font-bold flex items-center justify-center">02</span>
+<span class="text-[10px] uppercase font-mono tracking-wider text-brand-slateText">Phase 2</span>
+</div>
+<h3 class="font-display text-lg font-bold text-white mb-2">Analyse</h3>
+<p class="text-xs sm:text-sm text-brand-slateText leading-relaxed">
+                Decode market conditions before taking action. Map higher timeframe direction, mark key supply/demand imbalances and macro news releases.
+              </p>
+</div>
+<div class="mt-6 pt-3 border-t border-brand-border/40 text-[11px] font-mono text-brand-gold">
+              Structural Insight →
+            </div>
+</div>
+<!-- Step 3 -->
+<div class="p-6 rounded-2xl bg-brand-card border border-brand-border hover:border-brand-gold/40 transition duration-300 relative group flex flex-col justify-between">
+<div>
+<div class="flex items-center justify-between mb-4">
+<span class="w-8 h-8 rounded-full bg-brand-gold/20 border border-brand-gold text-brand-gold font-mono text-xs font-bold flex items-center justify-center">03</span>
+<span class="text-[10px] uppercase font-mono tracking-wider text-brand-slateText">Phase 3</span>
+</div>
+<h3 class="font-display text-lg font-bold text-white mb-2">Plan</h3>
+<p class="text-xs sm:text-sm text-brand-slateText leading-relaxed">
+                Formulate strict scenario plans. Define exact entry triggers, stop-loss invalidation levels, multi-target take profits, and position sizes.
+              </p>
+</div>
+<div class="mt-6 pt-3 border-t border-brand-border/40 text-[11px] font-mono text-brand-gold">
+              Tactical Setup →
+            </div>
+</div>
+<!-- Step 4 -->
+<div class="p-6 rounded-2xl bg-brand-card border border-brand-border hover:border-brand-gold/40 transition duration-300 relative group flex flex-col justify-between">
+<div>
+<div class="flex items-center justify-between mb-4">
+<span class="w-8 h-8 rounded-full bg-brand-gold/20 border border-brand-gold text-brand-gold font-mono text-xs font-bold flex items-center justify-center">04</span>
+<span class="text-[10px] uppercase font-mono tracking-wider text-brand-slateText">Phase 4</span>
+</div>
+<h3 class="font-display text-lg font-bold text-white mb-2">Manage</h3>
+<p class="text-xs sm:text-sm text-brand-slateText leading-relaxed">
+                Control the open position without emotion. Scale partials at predetermined targets, trail stops, and conduct honest trade reviews in your journal.
+              </p>
+</div>
+<div class="mt-6 pt-3 border-t border-brand-border/40 text-[11px] font-mono text-brand-gold">
+              Capital Evolution →
+            </div>
+</div>
+</div>
+</div>
+</section>
+<!-- END: MethodologySection -->
+<!-- BEGIN: CommunityTelegramSection -->
+<section class="py-20 lg:py-28 relative bg-brand-void" data-purpose="telegram-community" id="community">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<div class="rounded-3xl bg-gradient-to-r from-brand-card via-brand-dark to-brand-card border border-brand-gold/30 p-8 sm:p-12 lg:p-16 relative overflow-hidden shadow-gold-glow">
+<!-- Atmospheric lighting -->
+<div class="absolute -right-20 -bottom-20 w-96 h-96 bg-brand-gold/10 rounded-full blur-3xl pointer-events-none"></div>
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
+<div class="lg:col-span-7 space-y-6">
+<div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-brand-gold/15 border border-brand-gold/30 text-xs font-semibold text-brand-goldLight">
+<!-- Telegram paper plane icon -->
+<svg class="w-3.5 h-3.5" fill="currentColor" viewbox="0 0 24 24">
+<path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.446 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12l-6.871 4.326-2.962-.924c-.643-.204-.657-.643.136-.953l11.57-4.461c.535-.194 1.006.128.832.925z"></path>
+</svg>
+<span>Active Telegram Hub</span>
+</div>
+<h2 class="font-display text-3xl sm:text-5xl font-bold text-white tracking-tight">
+                Learn Together. <br/>
+<span class="gold-gradient-text">Grow Through Knowledge.</span>
+</h2>
+<p class="text-sm sm:text-base text-brand-slateText max-w-xl leading-relaxed">
+                Connect with passionate traders who share technical breakdowns, macroeconomic forecasts, and disciplined habits. Get direct access to signals, educational drops, and Q&amp;A sessions.
+              </p>
+<div class="flex flex-col sm:flex-row gap-4 pt-2">
+<button class="px-8 py-4 rounded-xl gold-gradient-bg text-black font-bold text-sm flex items-center justify-center gap-3 shadow-gold-sm hover:brightness-110 active:scale-95 transition duration-200" onclick="openModal()">
+<svg class="w-5 h-5 text-black" fill="currentColor" viewbox="0 0 24 24">
+<path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.446 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12l-6.871 4.326-2.962-.924c-.643-.204-.657-.643.136-.953l11.57-4.461c.535-.194 1.006.128.832.925z"></path>
+</svg>
+<span>Join Our Community</span>
+</button>
+<a class="px-8 py-4 rounded-xl bg-brand-elevated border border-brand-border text-white hover:border-brand-gold/40 text-sm font-semibold flex items-center justify-center gap-3 transition" href="https://wa.me/?text=Hello%20PRINTFOREX%20team,%20I%20would%20like%20to%20know%20more%20about%20your%20trading%20community." rel="noopener noreferrer" target="_blank">
+<svg class="w-5 h-5 text-green-400" fill="currentColor" viewbox="0 0 24 24">
+<path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"></path>
+</svg>
+<span>Chat on WhatsApp</span>
+</a>
+</div>
+</div>
+<!-- Telegram Channel Interactive Mockup Widget -->
+<div class="lg:col-span-5">
+<div class="bg-brand-void/90 rounded-2xl border border-brand-border/90 p-5 shadow-2xl backdrop-blur-md">
+<div class="flex items-center justify-between pb-4 border-b border-brand-border/60">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-brand-goldMuted border border-brand-gold/40 flex items-center justify-center text-brand-gold">
+<svg class="w-5 h-5" fill="currentColor" viewbox="0 0 24 24">
+<path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.446 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12l-6.871 4.326-2.962-.924c-.643-.204-.657-.643.136-.953l11.57-4.461c.535-.194 1.006.128.832.925z"></path>
+</svg>
+</div>
+<div>
+<div class="font-bold text-white text-sm">PRINTFOREX VIP Channel</div>
+<div class="text-[11px] text-brand-slateText font-mono">Members Worldwide</div>
+</div>
+</div>
+<span class="w-2.5 h-2.5 rounded-full bg-brand-success animate-pulse"></span>
+</div>
+<!-- Messages stream preview -->
+<div class="space-y-3 py-4 text-xs font-sans">
+<div class="bg-brand-card/80 p-3 rounded-xl border border-brand-border/40">
+<div class="flex justify-between items-center text-[10px] text-brand-gold font-mono mb-1">
+<span>DAILY RECAP</span>
+<span>08:15 GMT</span>
+</div>
+<p class="text-white/90">
+                      EUR/USD reaction at 1.0895 order block reached TP1 (+42 pips). Move stop-loss to entry (breakeven). Let remaining volume run into New York session.
+                    </p>
+</div>
+<div class="bg-brand-card/80 p-3 rounded-xl border border-brand-border/40">
+<div class="flex justify-between items-center text-[10px] text-brand-goldLight font-mono mb-1">
+<span>EDUCATIONAL DROP</span>
+<span>13:40 GMT</span>
+</div>
+<p class="text-white/90">
+                      New video walkthrough uploaded: "Recognizing Premium vs. Discount Pricing in London Open Swings."
+                    </p>
+</div>
+</div>
+<div class="pt-2">
+<div class="p-2.5 rounded-lg bg-brand-elevated border border-brand-border flex items-center justify-between text-xs font-mono text-brand-slateText">
+<span>Instant access on registration</span>
+<span class="text-brand-gold font-bold">100% Free</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- END: CommunityTelegramSection -->
+<!-- BEGIN: FaqSection -->
+<section class="py-20 lg:py-28 bg-brand-dark/30 border-t border-brand-border/40" data-purpose="faq-accordion" id="faq">
+<div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+<div class="text-center mb-16">
+<span class="text-xs font-semibold tracking-widest text-brand-gold uppercase">Clarifications</span>
+<h2 class="font-display text-3xl sm:text-4xl font-bold text-white mt-2">
+            Frequently Asked Questions
+          </h2>
+<p class="mt-3 text-brand-slateText text-sm sm:text-base">
+            Transparent answers to everything you need to know about joining and learning with PRINTFOREX.
+          </p>
+</div>
+<!-- Accordion Container -->
+<div class="space-y-4" id="faq-accordion-group">
+<!-- Item 1 -->
+<div class="rounded-xl bg-brand-card border border-brand-border/80 overflow-hidden transition-colors" data-purpose="faq-item">
+<button aria-expanded="false" class="w-full px-6 py-5 text-left font-display font-semibold text-white flex justify-between items-center gap-4 focus:outline-none" onclick="toggleFaq(this)" type="button">
+<span class="text-base sm:text-lg">What is PRINTFOREX?</span>
+<svg class="w-5 h-5 text-brand-gold transition-transform duration-300 transform" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</button>
+<div class="max-h-0 overflow-hidden transition-all duration-300 px-6 text-sm text-brand-slateText leading-relaxed">
+<p class="pb-5">
+                PRINTFOREX is an institutional-grade trading education community and analytical research platform. We provide comprehensive educational material, market structure analysis, daily setups, and discipline coaching to help individuals understand foreign exchange markets responsibly.
+              </p>
+</div>
+</div>
+<!-- Item 2 -->
+<div class="rounded-xl bg-brand-card border border-brand-border/80 overflow-hidden transition-colors" data-purpose="faq-item">
+<button aria-expanded="false" class="w-full px-6 py-5 text-left font-display font-semibold text-white flex justify-between items-center gap-4 focus:outline-none" onclick="toggleFaq(this)" type="button">
+<span class="text-base sm:text-lg">Who is this community designed for?</span>
+<svg class="w-5 h-5 text-brand-gold transition-transform duration-300 transform" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</button>
+<div class="max-h-0 overflow-hidden transition-all duration-300 px-6 text-sm text-brand-slateText leading-relaxed">
+<p class="pb-5">
+                Our community is built for ambitious individuals at all levels—from complete novices who want to learn how financial markets work from the ground up, to intermediate traders seeking structured institutional execution frameworks and risk discipline.
+              </p>
+</div>
+</div>
+<!-- Item 3 -->
+<div class="rounded-xl bg-brand-card border border-brand-border/80 overflow-hidden transition-colors" data-purpose="faq-item">
+<button aria-expanded="false" class="w-full px-6 py-5 text-left font-display font-semibold text-white flex justify-between items-center gap-4 focus:outline-none" onclick="toggleFaq(this)" type="button">
+<span class="text-base sm:text-lg">What services and resources are included?</span>
+<svg class="w-5 h-5 text-brand-gold transition-transform duration-300 transform" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</button>
+<div class="max-h-0 overflow-hidden transition-all duration-300 px-6 text-sm text-brand-slateText leading-relaxed">
+<p class="pb-5">
+                Members gain access to daily market technicals, currency and gold scenario planning, educational modules on liquidity and order blocks, Telegram discussion groups, and step-by-step risk management calculators.
+              </p>
+</div>
+</div>
+<!-- Item 4 -->
+<div class="rounded-xl bg-brand-card border border-brand-border/80 overflow-hidden transition-colors" data-purpose="faq-item">
+<button aria-expanded="false" class="w-full px-6 py-5 text-left font-display font-semibold text-white flex justify-between items-center gap-4 focus:outline-none" onclick="toggleFaq(this)" type="button">
+<span class="text-base sm:text-lg">Do I need previous financial experience to join?</span>
+<svg class="w-5 h-5 text-brand-gold transition-transform duration-300 transform" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</button>
+<div class="max-h-0 overflow-hidden transition-all duration-300 px-6 text-sm text-brand-slateText leading-relaxed">
+<p class="pb-5">
+                No previous experience is required. We structure our onboarding pathways to take beginners through terminology, charting software setup, and fundamental concepts before introducing advanced market setups.
+              </p>
+</div>
+</div>
+<!-- Item 5 -->
+<div class="rounded-xl bg-brand-card border border-brand-border/80 overflow-hidden transition-colors" data-purpose="faq-item">
+<button aria-expanded="false" class="w-full px-6 py-5 text-left font-display font-semibold text-white flex justify-between items-center gap-4 focus:outline-none" onclick="toggleFaq(this)" type="button">
+<span class="text-base sm:text-lg">How do I get started with PRINTFOREX?</span>
+<svg class="w-5 h-5 text-brand-gold transition-transform duration-300 transform" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</button>
+<div class="max-h-0 overflow-hidden transition-all duration-300 px-6 text-sm text-brand-slateText leading-relaxed">
+<p class="pb-5">
+                Simply click on "Join Our Community" anywhere on this page, fill out the simple registration form with your experience level, and you will receive instant redirection to our official Telegram channel and direct support concierge.
+              </p>
+</div>
+</div>
+<!-- Item 6 -->
+<div class="rounded-xl bg-brand-card border border-brand-border/80 overflow-hidden transition-colors" data-purpose="faq-item">
+<button aria-expanded="false" class="w-full px-6 py-5 text-left font-display font-semibold text-white flex justify-between items-center gap-4 focus:outline-none" onclick="toggleFaq(this)" type="button">
+<span class="text-base sm:text-lg">Are trading signals guaranteed profits?</span>
+<svg class="w-5 h-5 text-brand-gold transition-transform duration-300 transform" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</button>
+<div class="max-h-0 overflow-hidden transition-all duration-300 px-6 text-sm text-brand-slateText leading-relaxed">
+<p class="pb-5">
+                No. In financial markets, no profits can ever be guaranteed. Our signals and setups represent high-probability technical interpretations paired with strict risk parameters. We emphasize that every trade entails real financial risk.
+              </p>
+</div>
+</div>
+<!-- Item 7 -->
+<div class="rounded-xl bg-brand-card border border-brand-border/80 overflow-hidden transition-colors" data-purpose="faq-item">
+<button aria-expanded="false" class="w-full px-6 py-5 text-left font-display font-semibold text-white flex justify-between items-center gap-4 focus:outline-none" onclick="toggleFaq(this)" type="button">
+<span class="text-base sm:text-lg">What is your risk management approach?</span>
+<svg class="w-5 h-5 text-brand-gold transition-transform duration-300 transform" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</button>
+<div class="max-h-0 overflow-hidden transition-all duration-300 px-6 text-sm text-brand-slateText leading-relaxed">
+<p class="pb-5">
+                We advocate risking no more than 1% to 2% of total account capital per idea, strictly defining stop losses before entering any position, and maintaining asymmetric Risk-to-Reward parameters of at least 1:2 or higher.
+              </p>
+</div>
+</div>
+<!-- Item 8 -->
+<div class="rounded-xl bg-brand-card border border-brand-border/80 overflow-hidden transition-colors" data-purpose="faq-item">
+<button aria-expanded="false" class="w-full px-6 py-5 text-left font-display font-semibold text-white flex justify-between items-center gap-4 focus:outline-none" onclick="toggleFaq(this)" type="button">
+<span class="text-base sm:text-lg">How can I reach out to the PRINTFOREX support team?</span>
+<svg class="w-5 h-5 text-brand-gold transition-transform duration-300 transform" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M19 9l-7 7-7-7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</button>
+<div class="max-h-0 overflow-hidden transition-all duration-300 px-6 text-sm text-brand-slateText leading-relaxed">
+<p class="pb-5">
+                You can reach our team immediately via the WhatsApp floating button at the bottom-right of your screen, through our Telegram official handle, or by completing the registration form.
+              </p>
+</div>
+</div>
+</div>
+</div>
+</section>
+<!-- END: FaqSection -->
+<!-- BEGIN: FinalCtaSection -->
+<section class="py-20 lg:py-28 relative bg-brand-void overflow-hidden" data-purpose="final-conversion-callout">
+<!-- Glow Background Elements -->
+<div class="absolute inset-0 bg-radial from-brand-gold/10 via-transparent to-transparent opacity-50 pointer-events-none"></div>
+<div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
+<div class="p-8 sm:p-14 rounded-3xl bg-gradient-to-b from-brand-card to-brand-void border border-brand-gold/40 shadow-gold-glow">
+<span class="text-xs font-semibold tracking-widest text-brand-gold uppercase">Start Your Journey</span>
+<h2 class="font-display text-3xl sm:text-5xl font-bold text-white mt-4 tracking-tight">
+            Ready to Take the Next Step?
+          </h2>
+<p class="mt-4 text-brand-slateText text-base sm:text-lg max-w-2xl mx-auto">
+            Discover our community, explore institutional services, and connect with fellow traders committed to disciplined longevity.
+          </p>
+<div class="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
+<button class="w-full sm:w-auto px-8 py-4 rounded-xl gold-gradient-bg text-black font-bold text-base shadow-gold-sm hover:brightness-110 active:scale-95 transition" onclick="openModal()">
+              Join Our Community →
+            </button>
+<a class="w-full sm:w-auto px-8 py-4 rounded-xl bg-brand-elevated border border-brand-border hover:border-brand-gold/50 text-white font-medium text-base flex items-center justify-center gap-2.5 transition" href="https://wa.me/?text=Hello%20PRINTFOREX,%20I%20am%20ready%20to%20learn%20more." rel="noopener noreferrer" target="_blank">
+<span>Talk to Us on WhatsApp</span>
+</a>
+</div>
+<p class="text-[11px] text-brand-slateText/70 font-mono mt-6">
+            Instant Access · No Credit Card Required · Active Global Community
+          </p>
+</div>
+</div>
+</section>
+<!-- END: FinalCtaSection -->
+</main>
+<!-- BEGIN: MainFooter -->
+<footer class="bg-brand-void border-t border-brand-border/60 py-16 text-brand-slateText text-sm" data-purpose="global-footer">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 mb-12">
+<!-- Brand Column -->
+<div class="lg:col-span-2 space-y-4">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-lg bg-brand-card border border-brand-gold/40 flex items-center justify-center text-brand-gold">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2" viewbox="0 0 24 24">
+<polyline points="22 7 13.5 15.5 8.5 10.5 2 17"></polyline>
+<polyline points="16 7 22 7 22 13"></polyline>
+</svg>
+</div>
+<span class="font-display font-bold text-xl text-white">PRINT<span class="text-brand-gold">FOREX</span></span>
+</div>
+<p class="text-xs text-brand-slateText max-w-sm leading-relaxed">
+            Trading education and community dedicated to empowering traders through disciplined execution, rigorous risk management, and structural market literacy.
+          </p>
+<div class="text-xs font-mono text-brand-gold">
+            Think Beyond the Market.
+          </div>
+</div>
+<!-- Links Column 1: Ecosystem -->
+<div>
+<h4 class="font-display font-semibold text-white text-xs uppercase tracking-wider mb-4">Ecosystem</h4>
+<ul class="space-y-2.5 text-xs">
+<li><a class="hover:text-brand-gold transition" href="#services">Trading Academy</a></li>
+<li><a class="hover:text-brand-gold transition" href="#services">Market Analysis</a></li>
+<li><a class="hover:text-brand-gold transition" href="#services">High-Probability Signals</a></li>
+<li><a class="hover:text-brand-gold transition" href="#services">Risk Architecture</a></li>
+</ul>
+</div>
+<!-- Links Column 2: Community -->
+<div>
+<h4 class="font-display font-semibold text-white text-xs uppercase tracking-wider mb-4">Community</h4>
+<ul class="space-y-2.5 text-xs">
+<li><a class="hover:text-brand-gold transition" href="#community">Telegram VIP Channel</a></li>
+<li><a class="hover:text-brand-gold transition" href="https://wa.me/">WhatsApp Concierge</a></li>
+<li><a class="hover:text-brand-gold transition" href="#methodology">Our Methodology</a></li>
+<li><a class="hover:text-brand-gold transition" href="#faq">FAQ Support</a></li>
+</ul>
+</div>
+<!-- Links Column 3: Legal & Security -->
+<div>
+<h4 class="font-display font-semibold text-white text-xs uppercase tracking-wider mb-4">Compliance</h4>
+<ul class="space-y-2.5 text-xs">
+<li><a class="hover:text-brand-gold transition" href="#">Privacy Policy</a></li>
+<li><a class="hover:text-brand-gold transition" href="#">Terms of Service</a></li>
+<li><a class="hover:text-brand-gold transition" href="#">Risk Disclosure</a></li>
+<li><a class="hover:text-brand-gold transition" href="#">Affiliate Policy</a></li>
+</ul>
+</div>
+</div>
+<!-- Regulatory Risk Disclaimer -->
+<div class="pt-8 border-t border-brand-border/40 text-[11px] leading-relaxed text-brand-slateText/70 space-y-3">
+<p>
+<strong>High Risk Disclaimer:</strong> Foreign exchange trading (Forex) and CFDs carry a high level of risk and may not be suitable for all investors. The high degree of leverage can work against you as well as for you. Before deciding to trade foreign exchange, you should carefully consider your investment objectives, level of experience, and risk appetite. There is a possibility that you could sustain a loss of some or all of your initial investment. PRINTFOREX provides strictly educational resources and market information; nothing contained herein shall be construed as financial advice or an investment recommendation.
+        </p>
+<div class="flex flex-col sm:flex-row items-center justify-between gap-4 pt-4 border-t border-brand-border/20 text-xs">
+<div>
+            © 2025 PRINTFOREX. All rights reserved.
+          </div>
+<div class="font-mono text-[10px] text-brand-slateText/60">
+            DISCIPLINE · KNOWLEDGE · INTEGRITY
+          </div>
+</div>
+</div>
+</div>
+</footer>
+<!-- END: MainFooter -->
+<!-- BEGIN: InteractiveRegistrationModal -->
+<div aria-labelledby="modal-headline" aria-modal="true" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/85 backdrop-blur-md opacity-0 pointer-events-none transition-opacity duration-300" data-purpose="user-conversion-modal" id="registration-modal" role="dialog">
+<div class="w-full max-w-xl bg-brand-dark rounded-2xl border border-brand-gold/40 shadow-gold-glow overflow-hidden transform scale-95 transition-transform duration-300 relative flex flex-col max-h-[92vh]" id="modal-box">
+<!-- Close Button -->
+<button aria-label="Close Modal" class="absolute top-4 right-4 z-20 w-8 h-8 rounded-full bg-brand-elevated border border-brand-border text-brand-slateText hover:text-white flex items-center justify-center transition" onclick="closeModal()">
+<svg class="w-4 h-4" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M6 18L18 6M6 6l12 12" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</button>
+<!-- Scrollable Form Container -->
+<div class="overflow-y-auto p-6 sm:p-8 custom-scrollbar">
+<!-- VIEW 1: REGISTRATION FORM -->
+<div id="modal-form-view">
+<!-- Header -->
+<div class="text-center mb-6">
+<div class="inline-flex items-center gap-2 mb-2">
+<span class="font-display font-bold text-base text-brand-gold tracking-wider">PRINT<span class="text-white">FOREX</span></span>
+</div>
+<h3 class="font-display text-2xl font-bold text-white" id="modal-headline">Join Our Community</h3>
+<p class="text-xs sm:text-sm text-brand-slateText mt-1">
+              Tell us a little about yourself and become part of the PRINTFOREX trading community.
+            </p>
+</div>
+<!-- Form Body -->
+<form class="space-y-4 text-xs" id="community-form" onsubmit="handleFormSubmit(event)">
+<!-- Row: Full Name & Email -->
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+<div>
+<label class="block font-medium text-white mb-1" for="fullName">Full Name <span class="text-brand-gold">*</span></label>
+<input class="w-full rounded-lg bg-brand-card border border-brand-border text-white text-xs px-3.5 py-2.5 focus:border-brand-gold focus:ring-1 focus:ring-brand-gold outline-none transition" id="fullName" placeholder="e.g. John Doe" required="" type="text"/>
+</div>
+<div>
+<label class="block font-medium text-white mb-1" for="email">Email Address <span class="text-brand-gold">*</span></label>
+<input class="w-full rounded-lg bg-brand-card border border-brand-border text-white text-xs px-3.5 py-2.5 focus:border-brand-gold focus:ring-1 focus:ring-brand-gold outline-none transition" id="email" placeholder="name@example.com" required="" type="email"/>
+</div>
+</div>
+<!-- Row: Age & Phone -->
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+<div>
+<label class="block font-medium text-white mb-1" for="age">Age <span class="text-brand-gold">*</span></label>
+<input class="w-full rounded-lg bg-brand-card border border-brand-border text-white text-xs px-3.5 py-2.5 focus:border-brand-gold focus:ring-1 focus:ring-brand-gold outline-none transition" id="age" max="100" min="18" placeholder="18+" required="" type="number"/>
+</div>
+<div>
+<label class="block font-medium text-white mb-1" for="phone">Phone Number <span class="text-brand-gold">*</span></label>
+<input class="w-full rounded-lg bg-brand-card border border-brand-border text-white text-xs px-3.5 py-2.5 focus:border-brand-gold focus:ring-1 focus:ring-brand-gold outline-none transition" id="phone" placeholder="+1 (555) 000-0000" required="" type="tel"/>
+</div>
+</div>
+<!-- Row: City & Country -->
+<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+<div>
+<label class="block font-medium text-white mb-1" for="city">City <span class="text-brand-gold">*</span></label>
+<input class="w-full rounded-lg bg-brand-card border border-brand-border text-white text-xs px-3.5 py-2.5 focus:border-brand-gold focus:ring-1 focus:ring-brand-gold outline-none transition" id="city" placeholder="Your City" required="" type="text"/>
+</div>
+<div>
+<label class="block font-medium text-white mb-1" for="country">Country <span class="text-brand-gold">*</span></label>
+<select class="w-full rounded-lg bg-brand-card border border-brand-border text-white text-xs px-3.5 py-2.5 focus:border-brand-gold focus:ring-1 focus:ring-brand-gold outline-none transition" id="country" required="">
+<option disabled="" selected="" value="">Select country</option>
+<option value="United States">United States</option>
+<option value="United Kingdom">United Kingdom</option>
+<option value="France">France</option>
+<option value="Morocco">Morocco</option>
+<option value="United Arab Emirates">United Arab Emirates</option>
+<option value="Canada">Canada</option>
+<option value="Germany">Germany</option>
+<option value="Switzerland">Switzerland</option>
+<option value="Other">Other Country</option>
+</select>
+</div>
+</div>
+<!-- Experience Level Selectors -->
+<div>
+<label class="block font-medium text-white mb-2">Trading Experience Level <span class="text-brand-gold">*</span></label>
+<div class="grid grid-cols-2 gap-2">
+<label class="flex items-center p-2.5 rounded-lg border border-brand-border bg-brand-card cursor-pointer hover:border-brand-gold/50 transition">
+<input checked="" class="text-brand-gold focus:ring-brand-gold" name="experience" type="radio" value="Beginner"/>
+<div class="ml-2.5">
+<span class="block text-white font-medium">Beginner</span>
+<span class="block text-[10px] text-brand-slateText">Just getting started</span>
+</div>
+</label>
+<label class="flex items-center p-2.5 rounded-lg border border-brand-border bg-brand-card cursor-pointer hover:border-brand-gold/50 transition">
+<input class="text-brand-gold focus:ring-brand-gold" name="experience" type="radio" value="Intermediate"/>
+<div class="ml-2.5">
+<span class="block text-white font-medium">Intermediate</span>
+<span class="block text-[10px] text-brand-slateText">Some live trades</span>
+</div>
+</label>
+<label class="flex items-center p-2.5 rounded-lg border border-brand-border bg-brand-card cursor-pointer hover:border-brand-gold/50 transition">
+<input class="text-brand-gold focus:ring-brand-gold" name="experience" type="radio" value="Advanced"/>
+<div class="ml-2.5">
+<span class="block text-white font-medium">Advanced</span>
+<span class="block text-[10px] text-brand-slateText">Active consistency</span>
+</div>
+</label>
+<label class="flex items-center p-2.5 rounded-lg border border-brand-border bg-brand-card cursor-pointer hover:border-brand-gold/50 transition">
+<input class="text-brand-gold focus:ring-brand-gold" name="experience" type="radio" value="Professional"/>
+<div class="ml-2.5">
+<span class="block text-white font-medium">Professional</span>
+<span class="block text-[10px] text-brand-slateText">Prop firm / full-time</span>
+</div>
+</label>
+</div>
+</div>
+<!-- Legal Agreement Checkbox -->
+<div class="flex items-start gap-2 pt-2">
+<input class="mt-0.5 rounded border-brand-border bg-brand-card text-brand-gold focus:ring-brand-gold" id="consent" required="" type="checkbox"/>
+<label class="text-[11px] text-brand-slateText leading-tight" for="consent">
+                I agree to the <a class="text-brand-goldLight underline" href="#">Privacy Policy</a> and consent to PRINTFOREX processing my contact info to manage community registration and direct updates. *
+              </label>
+</div>
+<!-- Submit Button -->
+<div class="pt-3">
+<button class="w-full py-3.5 rounded-xl gold-gradient-bg text-black font-bold text-sm shadow-gold-sm hover:brightness-110 active:scale-98 transition flex items-center justify-center gap-2" id="submit-btn" type="submit">
+<span>Join Our Community</span>
+<svg class="w-4 h-4 text-black" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M14 5l7 7m0 0l-7 7m7-7H3" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"></path></svg>
+</button>
+</div>
+</form>
+</div>
+<!-- VIEW 2: SUCCESS VIEW (Revealed after submission) -->
+<div class="hidden text-center py-6" id="modal-success-view">
+<!-- Animated Checkmark Emblem -->
+<div class="w-16 h-16 rounded-full bg-brand-success/20 border-2 border-brand-success mx-auto flex items-center justify-center text-brand-success mb-5">
+<svg class="w-8 h-8" fill="none" stroke="currentColor" viewbox="0 0 24 24"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5"></path></svg>
+</div>
+<h3 class="font-display text-2xl sm:text-3xl font-bold text-white">Welcome to PRINTFOREX!</h3>
+<p class="text-xs sm:text-sm text-brand-slateText max-w-sm mx-auto mt-2 leading-relaxed">
+            Your registration has been successfully confirmed. You are now cleared to join our private Telegram channel and access analysis setups.
+          </p>
+<div class="mt-8 space-y-3">
+<a class="w-full py-3.5 px-6 rounded-xl gold-gradient-bg text-black font-bold text-sm flex items-center justify-center gap-2 shadow-gold-sm hover:brightness-110 transition" href="https://t.me/" rel="noopener noreferrer" target="_blank">
+<svg class="w-4 h-4" fill="currentColor" viewbox="0 0 24 24">
+<path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.446 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12l-6.871 4.326-2.962-.924c-.643-.204-.657-.643.136-.953l11.57-4.461c.535-.194 1.006.128.832.925z"></path>
+</svg>
+<span>Join Our Telegram Community →</span>
+</a>
+<a class="w-full py-3 px-6 rounded-xl bg-brand-elevated border border-brand-border text-white text-xs font-semibold hover:border-brand-gold/40 flex items-center justify-center gap-2 transition" href="https://wa.me/?text=Hello%20PRINTFOREX,%20I%20have%20registered%20and%20would%20like%20a%20brief%20introduction." rel="noopener noreferrer" target="_blank">
+<span>Talk to Our Team on WhatsApp</span>
+</a>
+</div>
+<button class="mt-6 text-xs text-brand-slateText hover:text-white underline transition" onclick="closeModal()">
+            Close Window
+          </button>
+</div>
+</div>
+</div>
+</div>
+<!-- END: InteractiveRegistrationModal -->
+<!-- BEGIN: FloatingWhatsAppWidget -->
+<div class="fixed bottom-6 right-6 z-40 flex items-center gap-3" data-purpose="floating-support-action">
+<!-- Context tooltip pill (Desktop only) -->
+<div class="hidden lg:flex items-center bg-brand-dark/95 border border-brand-gold/40 shadow-xl px-3 py-1.5 rounded-full backdrop-blur-md">
+<span class="w-2 h-2 rounded-full bg-green-500 mr-2 animate-ping"></span>
+<span class="text-[11px] font-medium text-white">Direct WhatsApp Concierge</span>
+</div>
+<!-- WhatsApp Pulse Action Button -->
+<a aria-label="Direct Chat with PRINTFOREX Support on WhatsApp" class="w-14 h-14 rounded-full bg-emerald-500 hover:bg-emerald-400 text-white flex items-center justify-center shadow-lg hover:shadow-emerald-500/40 hover:scale-105 active:scale-95 transition-all duration-300 relative group" href="https://wa.me/?text=Hello%20PRINTFOREX,%20I%20am%20interested%20in%20joining%20your%20community." rel="noopener noreferrer" target="_blank">
+<span class="absolute -top-1 -right-1 w-3.5 h-3.5 bg-brand-gold rounded-full border-2 border-brand-void"></span>
+<svg class="w-7 h-7" fill="currentColor" viewbox="0 0 24 24">
+<path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z"></path>
+</svg>
+</a>
+</div>
+<!-- END: FloatingWhatsAppWidget -->
+<!-- BEGIN: InteractiveHandlersScript -->
+<script data-purpose="modal-and-faq-logic">
+    // FAQ Accordion Toggle Logic
+    function toggleFaq(button) {
+      const container = button.nextElementSibling;
+      const svgIcon = button.querySelector('svg');
+      const isExpanded = button.getAttribute('aria-expanded') === 'true';
+
+      // Close all siblings for single accordion focus
+      const allButtons = document.querySelectorAll('#faq-accordion-group button');
+      allButtons.forEach(btn => {
+        if (btn !== button) {
+          btn.setAttribute('aria-expanded', 'false');
+          btn.nextElementSibling.style.maxHeight = null;
+          const icon = btn.querySelector('svg');
+          if (icon) icon.classList.remove('rotate-180');
+        }
+      });
+
+      // Toggle clicked
+      if (isExpanded) {
+        button.setAttribute('aria-expanded', 'false');
+        container.style.maxHeight = null;
+        svgIcon.classList.remove('rotate-180');
+      } else {
+        button.setAttribute('aria-expanded', 'true');
+        container.style.maxHeight = container.scrollHeight + 'px';
+        svgIcon.classList.add('rotate-180');
+      }
+    }
+
+    // Modal Control Logic
+    const modal = document.getElementById('registration-modal');
+    const modalBox = document.getElementById('modal-box');
+    const formView = document.getElementById('modal-form-view');
+    const successView = document.getElementById('modal-success-view');
+
+    function openModal() {
+      modal.classList.remove('pointer-events-none', 'opacity-0');
+      modal.classList.add('opacity-100');
+      modalBox.classList.remove('scale-95');
+      modalBox.classList.add('scale-100');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeModal() {
+      modal.classList.add('opacity-0');
+      modal.classList.add('pointer-events-none');
+      modal.classList.remove('opacity-100');
+      modalBox.classList.remove('scale-100');
+      modalBox.classList.add('scale-95');
+      document.body.style.overflow = '';
+      
+      // Reset view after transition
+      setTimeout(() => {
+        formView.classList.remove('hidden');
+        successView.classList.add('hidden');
+      }, 300);
+    }
+
+    // Close on backdrop click
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) {
+        closeModal();
+      }
+    });
+
+    // Close on Escape Key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && !modal.classList.contains('pointer-events-none')) {
+        closeModal();
+      }
+    });
+
+    // Form Submission Handling with simulated API state
+    function handleFormSubmit(event) {
+      event.preventDefault();
+      const submitBtn = document.getElementById('submit-btn');
+      
+      // Set loading state
+      const originalText = submitBtn.innerHTML;
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = `
+        <svg class="animate-spin -ml-1 mr-2 h-4 w-4 text-black" fill="none" viewBox="0 0 24 24">
+          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+        </svg>
+        <span>Processing Registration...</span>
+      `;
+
+      // Simulate Network Request
+      setTimeout(() => {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = originalText;
+        
+        // Show success view
+        formView.classList.add('hidden');
+        successView.classList.remove('hidden');
+      }, 750);
+    }
+  </script>
+<!-- END: InteractiveHandlersScript -->
+</body></html>

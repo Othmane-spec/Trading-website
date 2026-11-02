@@ -17,10 +17,10 @@ const space = Space_Grotesk({
 });
 
 export const metadata: Metadata = {
-  title: `${site.name} — Think Beyond the Market`,
+  title: `${site.name} — Trading Education & Community | Think Beyond the Market`,
   description: site.description,
   openGraph: {
-    title: site.name,
+    title: `${site.name} — Trading Education & Community`,
     description: site.description,
     type: "website",
   },
@@ -32,8 +32,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body className={`${inter.variable} ${space.variable}`}>
+    <html lang="en" className="scroll-smooth">
+      <body
+        className={`${inter.variable} ${space.variable} bg-brand-void text-[#F5F5F2] font-sans antialiased selection:bg-brand-gold selection:text-black overflow-x-hidden custom-scrollbar`}
+      >
         {children}
         <WhatsAppButton />
       </body>
