@@ -1,0 +1,73 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Helper functions
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() > 0 && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function isAdmin() {
+      return isSignedIn() && (
+        (request.auth.token.email != null && request.auth.token.email.lower() == 'essaimeko@gmail.com') ||
+        exists(/databases/$(database)/documents/admins/$(request.auth.uid))
+      );
+    }
+
+    function isValidRegistration(data) {
+      return data.keys().hasAll(['fullName', 'email', 'phone', 'country', 'experience', 'consent', 'status', 'createdAt'])
+        && data.keys().hasOnly(['fullName', 'email', 'phone', 'age', 'city', 'country', 'experience', 'consent', 'status', 'createdAt'])
+        && data.fullName is string && data.fullName.size() >= 2 && data.fullName.size() <= 100
+        && data.email is string && data.email.size() >= 3 && data.email.size() <= 150 && data.email.matches('^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$')
+        && data.phone is string && data.phone.size() >= 6 && data.phone.size() <= 30
+        && (!('age' in data) || data.age == null || (data.age is string && data.age.size() <= 10))
+        && (!('city' in data) || data.city == null || (data.city is string && data.city.size() <= 100))
+        && data.country is string && data.country.size() >= 2 && data.country.size() <= 100
+        && data.experience in ['Beginner', 'Intermediate', 'Advanced', 'Professional']
+        && data.consent is bool && data.consent == true
+        && data.status == 'pending'
+        && data.createdAt == request.time;
+    }
+
+    // Connection testing endpoint
+    match /test/{docId} {
+      allow get: if true;
+    }
+
+    // Community Member Registrations
+    match /registrations/{registrationId} {
+      // Anyone can submit a valid registration application
+      allow create: if isValidId(registrationId)
+        && isValidRegistration(incoming());
+
+      // Allow reads for the admin dashboard & server management
+      allow get, list: if true;
+
+      // Status updates
+      allow update: if isValidId(registrationId)
+        && incoming().diff(existing()).affectedKeys().hasOnly(['status', 'updatedAt'])
+        && incoming().status in ['pending', 'contacted', 'approved', 'rejected']
+        && incoming().updatedAt == request.time;
+
+      allow delete: if isAdmin();
+    }
+
+    // Admin Privileges Collection
+    match /admins/{adminId} {
+      allow get: if isSignedIn() && request.auth.uid == adminId;
+      allow list, write: if false;
+    }
+  }
+}

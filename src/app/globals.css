@@ -20,6 +20,34 @@
   --shadow-gold-sm: 0 0 15px -3px rgba(212, 175, 55, 0.3);
 }
 
+/* ── Live Financial News Ticker Marquee ── */
+@keyframes ticker-marquee {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+.animate-ticker-marquee {
+  display: flex;
+  width: max-content;
+  animation: ticker-marquee var(--ticker-duration, 42s) linear infinite;
+  will-change: transform;
+}
+
+.ticker-pause:hover .animate-ticker-marquee,
+.ticker-pause:focus-within .animate-ticker-marquee {
+  animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-ticker-marquee {
+    animation: none !important;
+  }
+}
+
 /* Subtle background grid pattern */
 .bg-grid-pattern {
   background-size: 40px 40px;

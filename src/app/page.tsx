@@ -23,9 +23,12 @@ import {
   GraduationCap,
   BarChart3,
   Zap,
+  AlertCircle,
 } from "lucide-react";
 import { site } from "@/config/site";
 import { TiltCard } from "@/components/ui/TiltCard";
+import { TradingNewsTicker } from "@/components/news/TradingNewsTicker";
+import { testConnection } from "@/lib/firebase";
 
 export default function Home() {
   const prefersReduced = useReducedMotion();
@@ -40,6 +43,7 @@ export default function Home() {
   // Modal Form states
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [formSuccess, setFormSuccess] = useState(false);
+  const [formError, setFormError] = useState<string | null>(null);
   const [formData, setFormData] = useState({
     fullName: "",
     email: "",
@@ -50,6 +54,11 @@ export default function Home() {
     experience: "Beginner",
     consent: false,
   });
+
+  // Verify Firestore connection on initial boot
+  useEffect(() => {
+    testConnection();
+  }, []);
 
   // Handle ESC key to close modal
   useEffect(() => {
@@ -73,6 +82,7 @@ export default function Home() {
 
   const openModal = () => {
     setFormSuccess(false);
+    setFormError(null);
     setModalOpen(true);
   };
 
@@ -80,18 +90,52 @@ export default function Home() {
     setModalOpen(false);
     setTimeout(() => {
       setFormSuccess(false);
+      setFormError(null);
     }, 300);
   };
 
-  const handleFormSubmit = (e: React.FormEvent) => {
+  const handleFormSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
+    setFormError(null);
 
-    // Simulate API registration request
-    setTimeout(() => {
-      setIsSubmitting(false);
+    try {
+      const res = await fetch("/api/community/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+
+      let data: any = {};
+      try {
+        data = await res.json();
+      } catch (jsonErr) {
+        console.warn("Could not parse JSON response:", jsonErr);
+      }
+
+      if (!res.ok) {
+        throw new Error(data.error || "Failed to submit registration.");
+      }
+
       setFormSuccess(true);
-    }, 700);
+      // Reset form on success
+      setFormData({
+        fullName: "",
+        email: "",
+        age: "",
+        phone: "",
+        city: "",
+        country: "",
+        experience: "Beginner",
+        consent: false,
+      });
+    } catch (err: any) {
+      setFormError(err.message || "An unexpected error occurred. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const toggleFaq = (index: number) => {
@@ -266,6 +310,9 @@ export default function Home() {
         </AnimatePresence>
       </header>
       {/* ── END: StickyNavBar ── */}
+
+      {/* Live Market Ticker */}
+      <TradingNewsTicker />
 
       <main>
         {/* ── BEGIN: HeroSection ── */}
@@ -1368,6 +1415,11 @@ export default function Home() {
                     Affiliate Policy
                   </Link>
                 </li>
+                <li>
+                  <Link className="hover:text-brand-gold text-brand-slateText/60 transition" href="/admin">
+                    Espace Admin
+                  </Link>
+                </li>
               </ul>
             </div>
           </div>
@@ -1449,6 +1501,13 @@ export default function Home() {
                     </div>
 
                     <form className="space-y-4 text-xs" onSubmit={handleFormSubmit}>
+                      {formError && (
+                        <div className="p-3 rounded-lg bg-red-500/15 border border-red-500/40 text-red-300 text-xs flex items-start gap-2.5">
+                          <AlertCircle className="w-4 h-4 flex-shrink-0 mt-0.5 text-red-400" />
+                          <span>{formError}</span>
+                        </div>
+                      )}
+
                       {/* Row: Full Name & Email */}
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>

@@ -1,0 +1,105 @@
+{
+  "entities": {
+    "Registration": {
+      "title": "Registration",
+      "description": "A community member registration entry for PRINTFOREX.",
+      "type": "object",
+      "properties": {
+        "fullName": {
+          "type": "string",
+          "description": "Full name of the registrant",
+          "minLength": 2,
+          "maxLength": 100
+        },
+        "email": {
+          "type": "string",
+          "description": "Email address of the registrant",
+          "maxLength": 150
+        },
+        "phone": {
+          "type": "string",
+          "description": "Phone number or WhatsApp contact",
+          "maxLength": 30
+        },
+        "age": {
+          "type": "string",
+          "description": "Age or age bracket of the registrant",
+          "maxLength": 10
+        },
+        "city": {
+          "type": "string",
+          "description": "City of residence",
+          "maxLength": 100
+        },
+        "country": {
+          "type": "string",
+          "description": "Country of residence",
+          "maxLength": 100
+        },
+        "experience": {
+          "type": "string",
+          "description": "Trading experience level",
+          "enum": ["Beginner", "Intermediate", "Advanced", "Professional"]
+        },
+        "consent": {
+          "type": "boolean",
+          "description": "Explicit consent to privacy policy and data processing"
+        },
+        "status": {
+          "type": "string",
+          "description": "Lifecycle state of the registration",
+          "enum": ["pending", "contacted", "approved", "rejected"]
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Timestamp when the application was submitted"
+        }
+      },
+      "required": [
+        "fullName",
+        "email",
+        "phone",
+        "country",
+        "experience",
+        "consent",
+        "status",
+        "createdAt"
+      ]
+    },
+    "Admin": {
+      "title": "Admin",
+      "description": "Administrator account record for platform staff.",
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string",
+          "description": "Admin email address"
+        },
+        "role": {
+          "type": "string",
+          "enum": ["admin", "superadmin"]
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": ["email", "role", "createdAt"]
+    }
+  },
+  "firestore": {
+    "/registrations/{registrationId}": {
+      "schema": {
+        "$ref": "#/entities/Registration"
+      },
+      "description": "Submitted community member registrations with strict PII isolation."
+    },
+    "/admins/{adminId}": {
+      "schema": {
+        "$ref": "#/entities/Admin"
+      },
+      "description": "Platform administrator privilege registry."
+    }
+  }
+}
