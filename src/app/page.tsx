@@ -1,13 +1,11 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import {
   motion,
   AnimatePresence,
   useReducedMotion,
-  useScroll,
-  useTransform,
   type Variants,
 } from "motion/react";
 import {
@@ -15,6 +13,7 @@ import {
   Menu,
   X,
   ArrowRight,
+  ArrowLeft,
   ShieldCheck,
   Check,
   ChevronDown,
@@ -28,17 +27,19 @@ import {
 import { site } from "@/config/site";
 import { TiltCard } from "@/components/ui/TiltCard";
 import { TradingNewsTicker } from "@/components/news/TradingNewsTicker";
+import { LanguageSelector } from "@/components/ui/LanguageSelector";
+import { useLanguage } from "@/context/LanguageContext";
 import { testConnection } from "@/lib/firebase";
 
 export default function Home() {
   const prefersReduced = useReducedMotion();
+  const { t, isRtl } = useLanguage();
 
   // Navigation & Interactive states
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [modalOpen, setModalOpen] = useState(false);
   const [openFaqIndex, setOpenFaqIndex] = useState<number | null>(0);
   const [activeAnalysisTf, setActiveAnalysisTf] = useState("H1");
-  const [activeAnalysisPoint, setActiveAnalysisPoint] = useState<number | null>(null);
 
   // Modal Form states
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -116,7 +117,7 @@ export default function Home() {
       }
 
       if (!res.ok) {
-        throw new Error(data.error || "Failed to submit registration.");
+        throw new Error(data.error || t.modal.errorFallback);
       }
 
       setFormSuccess(true);
@@ -132,7 +133,7 @@ export default function Home() {
         consent: false,
       });
     } catch (err: any) {
-      setFormError(err.message || "An unexpected error occurred. Please try again.");
+      setFormError(err.message || t.modal.errorFallback);
     } finally {
       setIsSubmitting(false);
     }
@@ -144,43 +145,21 @@ export default function Home() {
 
   const cleanPhone = site.whatsapp?.phoneNumber?.replace(/[^0-9]/g, "") || "1234567890";
   const whatsappUrl = `https://wa.me/${cleanPhone}?text=${encodeURIComponent(
-    site.whatsapp?.message || "Hello PRINTFOREX, I would like to learn more about your community."
+    t.whatsappButton.defaultMessage
   )}`;
 
-  const faqs = [
-    {
-      q: "What is PRINTFOREX?",
-      a: "PRINTFOREX is an institutional-grade trading education community and analytical research platform. We provide comprehensive educational material, market structure analysis, daily setups, and discipline coaching to help individuals understand foreign exchange markets responsibly.",
-    },
-    {
-      q: "Who is this community designed for?",
-      a: "Our community is built for ambitious individuals at all levels—from complete novices who want to learn how financial markets work from the ground up, to intermediate traders seeking structured institutional execution frameworks and risk discipline.",
-    },
-    {
-      q: "What services and resources are included?",
-      a: "Members gain access to daily market technicals, currency and gold scenario planning, educational modules on liquidity and order blocks, Telegram discussion groups, and step-by-step risk management calculators.",
-    },
-    {
-      q: "Do I need previous financial experience to join?",
-      a: "No. No previous experience is required. We structure our onboarding pathways to take beginners through terminology, charting software setup, and fundamental concepts before introducing advanced market setups.",
-    },
-    {
-      q: "How do I get started with PRINTFOREX?",
-      a: "Simply click on 'Join Our Community' anywhere on this page, fill out the simple registration form with your experience level, and you will receive instant redirection to our official Telegram channel and direct support concierge.",
-    },
-    {
-      q: "Are trading signals guaranteed profits?",
-      a: "No. In financial markets, no profits can ever be guaranteed. Our signals and setups represent high-probability technical interpretations paired with strict risk parameters. We emphasize that every trade entails real financial risk.",
-    },
-    {
-      q: "What is your risk management approach?",
-      a: "We advocate risking no more than 1% to 2% of total account capital per idea, strictly defining stop losses before entering any position, and maintaining asymmetric Risk-to-Reward parameters of at least 1:2 or higher.",
-    },
-    {
-      q: "How can I reach out to the PRINTFOREX support team?",
-      a: "You can reach our team immediately via the WhatsApp floating button at the bottom-right of your screen, through our Telegram official handle, or by completing the registration form.",
-    },
+  // Navigation items translated
+  const navItems = [
+    { label: t.nav.about, href: "#hero" },
+    { label: t.nav.philosophy, href: "#philosophy" },
+    { label: t.nav.services, href: "#services" },
+    { label: t.nav.methodology, href: "#methodology" },
+    { label: t.nav.community, href: "#community" },
+    { label: t.nav.faq, href: "#faq" },
   ];
+
+  // Service icons mapping
+  const serviceIcons = [GraduationCap, BarChart3, Zap, ShieldCheck];
 
   // Motion animation presets
   const fadeInUp: Variants = {
@@ -201,6 +180,9 @@ export default function Home() {
       },
     },
   };
+
+  // Arrow component that flips direction in RTL
+  const ArrowIcon = isRtl ? ArrowLeft : ArrowRight;
 
   return (
     <div className="min-h-screen bg-brand-void text-[#F5F5F2] font-sans antialiased selection:bg-brand-gold selection:text-black overflow-x-hidden custom-scrollbar">
@@ -232,9 +214,9 @@ export default function Home() {
           {/* Desktop Navigation Menu */}
           <nav
             aria-label="Main Links"
-            className="hidden md:flex items-center space-x-7 text-sm font-medium text-brand-slateText"
+            className="hidden lg:flex items-center space-x-6 rtl:space-x-reverse text-sm font-medium text-brand-slateText"
           >
-            {site.nav.map((item) => (
+            {navItems.map((item) => (
               <a
                 key={item.href}
                 className="hover:text-brand-gold transition-colors duration-200 relative group py-1"
@@ -246,26 +228,29 @@ export default function Home() {
             ))}
           </nav>
 
-          {/* Primary Action CTA & Mobile Trigger */}
+          {/* Primary Action CTA, Language Switcher & Mobile Trigger */}
           <div className="flex items-center gap-3">
+            {/* Language Switcher Dropdown */}
+            <LanguageSelector />
+
             <motion.button
               aria-label="Join PRINTFOREX Community Modal"
-              className="relative group overflow-hidden rounded-full p-[1px] focus:outline-none focus:ring-2 focus:ring-brand-gold/60 cursor-pointer hover:shadow-gold-glow transition-all duration-300"
+              className="hidden sm:inline-flex relative group overflow-hidden rounded-full p-[1px] focus:outline-none focus:ring-2 focus:ring-brand-gold/60 cursor-pointer hover:shadow-gold-glow transition-all duration-300"
               onClick={openModal}
               whileHover={{ scale: 1.03 }}
               whileTap={{ scale: 0.97 }}
             >
               <span className="absolute inset-0 bg-gradient-to-r from-brand-goldLight via-brand-gold to-brand-goldDark transition-all duration-300" />
-              <span className="relative px-5 py-2.5 rounded-full bg-brand-void text-xs sm:text-sm font-semibold text-brand-goldLight flex items-center gap-2 group-hover:bg-transparent group-hover:text-black transition-all duration-300">
-                <span>Join Our Community</span>
-                <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5 group-hover:text-black" />
+              <span className="relative px-4 sm:px-5 py-2.5 rounded-full bg-brand-void text-xs sm:text-sm font-semibold text-brand-goldLight flex items-center gap-2 group-hover:bg-transparent group-hover:text-black transition-all duration-300">
+                <span>{t.nav.joinCommunity}</span>
+                <ArrowIcon className="w-4 h-4 transition-transform group-hover:translate-x-0.5 rtl:group-hover:-translate-x-0.5 group-hover:text-black" />
               </span>
             </motion.button>
 
             {/* Mobile Menu Hamburger */}
             <button
               aria-label="Toggle Navigation Menu"
-              className="md:hidden p-2 rounded-lg bg-brand-card border border-brand-border text-brand-slateText hover:text-white cursor-pointer"
+              className="lg:hidden p-2 rounded-lg bg-brand-card border border-brand-border text-brand-slateText hover:text-white cursor-pointer"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             >
               {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
@@ -281,29 +266,35 @@ export default function Home() {
               animate={{ opacity: 1, height: "auto" }}
               exit={{ opacity: 0, height: 0 }}
               transition={{ duration: 0.28, ease: "easeInOut" }}
-              className="md:hidden border-b border-brand-border/60 bg-brand-dark/95 backdrop-blur-xl px-4 py-5 space-y-3 overflow-hidden"
+              className="lg:hidden border-b border-brand-border/60 bg-brand-dark/95 backdrop-blur-xl px-4 py-5 space-y-4 overflow-hidden"
             >
               <div className="flex flex-col space-y-3 text-sm font-medium text-brand-slateText">
-                {site.nav.map((item) => (
+                {navItems.map((item) => (
                   <a
                     key={item.href}
                     href={item.href}
-                    className="hover:text-brand-gold py-1 transition-colors"
+                    className="hover:text-brand-gold py-1.5 transition-colors border-b border-brand-border/20"
                     onClick={() => setMobileMenuOpen(false)}
                   >
                     {item.label}
                   </a>
                 ))}
               </div>
+
+              <div className="pt-2 flex items-center justify-between border-t border-brand-border/40">
+                <span className="text-xs text-brand-slateText font-medium">Language / Langue / اللغة</span>
+                <LanguageSelector />
+              </div>
+
               <button
-                className="w-full mt-2 py-3 rounded-xl gold-gradient-bg text-black font-semibold text-sm flex items-center justify-center gap-2 cursor-pointer"
+                className="w-full mt-2 py-3 rounded-xl gold-gradient-bg text-black font-semibold text-sm flex items-center justify-center gap-2 cursor-pointer shadow-gold-sm"
                 onClick={() => {
                   setMobileMenuOpen(false);
                   openModal();
                 }}
               >
-                <span>Join Our Community</span>
-                <ArrowRight className="w-4 h-4" />
+                <span>{t.nav.joinCommunity}</span>
+                <ArrowIcon className="w-4 h-4" />
               </button>
             </motion.div>
           )}
@@ -311,13 +302,13 @@ export default function Home() {
       </header>
       {/* ── END: StickyNavBar ── */}
 
-      {/* Live Market Ticker */}
+      {/* Live Market Ticker with 12Data live feed and translations */}
       <TradingNewsTicker />
 
       <main>
         {/* ── BEGIN: HeroSection ── */}
         <section
-          className="relative min-h-[92vh] flex items-center justify-center overflow-hidden py-16 lg:py-24 bg-grid-pattern"
+          className="relative min-h-[90vh] flex items-center justify-center overflow-hidden py-16 lg:py-24 bg-grid-pattern"
           data-purpose="hero-experience"
           id="hero"
         >
@@ -351,7 +342,7 @@ export default function Home() {
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
               {/* Hero Left Column: Narrative Content */}
               <motion.div
-                className="lg:col-span-7 flex flex-col items-start text-left space-y-7"
+                className="lg:col-span-7 flex flex-col items-start text-start space-y-7"
                 initial={prefersReduced ? undefined : "hidden"}
                 animate={prefersReduced ? undefined : "visible"}
                 variants={staggerContainer}
@@ -363,7 +354,7 @@ export default function Home() {
                 >
                   <span className="w-2 h-2 rounded-full bg-brand-gold animate-ping" />
                   <span className="text-xs uppercase font-semibold tracking-wider text-brand-goldLight">
-                    Discipline · Knowledge · Strategy
+                    {t.hero.badge}
                   </span>
                 </motion.div>
 
@@ -372,8 +363,8 @@ export default function Home() {
                   variants={fadeInUp}
                   className="font-display text-4xl sm:text-6xl lg:text-7xl font-bold tracking-tight text-white leading-[1.08]"
                 >
-                  Think Beyond <br className="hidden sm:block" />
-                  <span className="gold-gradient-text">The Market.</span>
+                  {t.hero.titleLine1} <br className="hidden sm:block" />
+                  <span className="gold-gradient-text">{t.hero.titleLine2}</span>
                 </motion.h1>
 
                 {/* Subtitle */}
@@ -381,8 +372,7 @@ export default function Home() {
                   variants={fadeInUp}
                   className="text-base sm:text-lg text-brand-slateText max-w-xl font-normal leading-relaxed"
                 >
-                  A premier trading ecosystem built on institutional market structure, rigorous risk
-                  awareness, and continuous education. Stop chasing noise; master execution.
+                  {t.hero.subtitle}
                 </motion.p>
 
                 {/* CTA Cluster */}
@@ -396,8 +386,8 @@ export default function Home() {
                     whileHover={{ scale: 1.025 }}
                     whileTap={{ scale: 0.98 }}
                   >
-                    <span>Join Our Community</span>
-                    <ArrowRight className="w-4 h-4 text-black" />
+                    <span>{t.hero.ctaPrimary}</span>
+                    <ArrowIcon className="w-4 h-4 text-black" />
                   </motion.button>
                   <motion.a
                     className="px-7 py-4 rounded-xl bg-brand-card/80 hover:bg-brand-elevated border border-brand-border hover:border-brand-gold/40 text-brand-slateText hover:text-white font-medium text-sm sm:text-base flex items-center justify-center gap-2 transition duration-200 cursor-pointer"
@@ -405,7 +395,7 @@ export default function Home() {
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
                   >
-                    <span>Explore Our Services</span>
+                    <span>{t.hero.ctaSecondary}</span>
                   </motion.a>
                 </motion.div>
 
@@ -415,16 +405,16 @@ export default function Home() {
                   className="pt-4 flex flex-wrap items-center gap-6 text-xs text-brand-slateText border-t border-brand-border/40 w-full"
                 >
                   <div className="flex items-center gap-2">
-                    <ShieldCheck className="w-4 h-4 text-brand-gold" />
-                    <span>Strict Risk Management Focus</span>
+                    <ShieldCheck className="w-4 h-4 text-brand-gold flex-shrink-0" />
+                    <span>{t.hero.trustRisk}</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <Check className="w-4 h-4 text-brand-success" />
-                    <span>Daily Institutional Technicals</span>
+                    <Check className="w-4 h-4 text-brand-success flex-shrink-0" />
+                    <span>{t.hero.trustDaily}</span>
                   </div>
                   <div className="flex items-center gap-2">
-                    <Users className="w-4 h-4 text-brand-gold" />
-                    <span>Interactive Telegram Support</span>
+                    <Users className="w-4 h-4 text-brand-gold flex-shrink-0" />
+                    <span>{t.hero.trustTelegram}</span>
                   </div>
                 </motion.div>
               </motion.div>
@@ -453,12 +443,12 @@ export default function Home() {
                       <span className="w-3 h-3 rounded-full bg-red-500/80 inline-block" />
                       <span className="w-3 h-3 rounded-full bg-amber-500/80 inline-block" />
                       <span className="w-3 h-3 rounded-full bg-emerald-500/80 inline-block" />
-                      <span className="ml-2 font-mono text-xs text-brand-slateText">
-                        PRINT_MARKET_RADAR // EURUSD
+                      <span className="ml-2 rtl:mr-2 rtl:ml-0 font-mono text-xs text-brand-slateText dir-ltr">
+                        {t.hero.cardRadarTitle}
                       </span>
                     </div>
                     <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-mono bg-brand-success/15 text-brand-success font-semibold">
-                      LIVE SETUP
+                      {t.hero.cardLiveSetup}
                     </span>
                   </div>
 
@@ -472,14 +462,14 @@ export default function Home() {
                         </div>
                         <div>
                           <div className="text-xs text-brand-slateText uppercase tracking-wider font-semibold">
-                            Bullish Invalidation
+                            {t.hero.cardBullishInvalidation}
                           </div>
-                          <div className="text-lg font-bold font-mono text-brand-goldLight">
+                          <div className="text-lg font-bold font-mono text-brand-goldLight dir-ltr">
                             1.08420 → 1.09650
                           </div>
                         </div>
                       </div>
-                      <span className="text-xs font-mono font-bold text-brand-success bg-brand-success/10 px-2.5 py-1 rounded">
+                      <span className="text-xs font-mono font-bold text-brand-success bg-brand-success/10 px-2.5 py-1 rounded dir-ltr">
                         R:R 1:3.4
                       </span>
                     </div>
@@ -549,16 +539,16 @@ export default function Home() {
                     {/* Live Metrics Footer */}
                     <div className="grid grid-cols-3 gap-2 text-center pt-1 font-mono">
                       <div className="p-2 rounded-lg bg-brand-void/60 border border-brand-border/40">
-                        <span className="block text-[10px] text-brand-slateText">SESSION</span>
+                        <span className="block text-[10px] text-brand-slateText">{t.hero.cardSession}</span>
                         <span className="text-xs font-semibold text-white">London / NY</span>
                       </div>
                       <div className="p-2 rounded-lg bg-brand-void/60 border border-brand-border/40">
-                        <span className="block text-[10px] text-brand-slateText">BIAS</span>
-                        <span className="text-xs font-semibold text-brand-success">High Liquidity</span>
+                        <span className="block text-[10px] text-brand-slateText">{t.hero.cardBias}</span>
+                        <span className="text-xs font-semibold text-brand-success">{t.hero.cardBiasValue}</span>
                       </div>
                       <div className="p-2 rounded-lg bg-brand-void/60 border border-brand-border/40">
-                        <span className="block text-[10px] text-brand-slateText">FRAME</span>
-                        <span className="text-xs font-semibold text-brand-goldLight">H4 Institutional</span>
+                        <span className="block text-[10px] text-brand-slateText">{t.hero.cardFrame}</span>
+                        <span className="text-xs font-semibold text-brand-goldLight">{t.hero.cardFrameValue}</span>
                       </div>
                     </div>
                   </div>
@@ -585,40 +575,19 @@ export default function Home() {
               transition={{ duration: 0.6 }}
             >
               <span className="text-xs font-semibold tracking-widest text-brand-gold uppercase">
-                Our Philosophy
+                {t.philosophy.tag}
               </span>
               <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold text-white mt-3">
-                Trading is a process, not a shortcut.
+                {t.philosophy.title}
               </h2>
               <p className="mt-4 text-brand-slateText text-base sm:text-lg">
-                At PRINTFOREX, we believe that understanding the markets, building disciplined daily
-                habits, and prioritizing risk management are the fundamental pillars of consistent,
-                long-term mastery.
+                {t.philosophy.subtitle}
               </p>
             </motion.div>
 
-            {/* 3 Core Principles Grid with 3D Physics */}
+            {/* 3 Core Principles Grid */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              {[
-                {
-                  num: "01",
-                  title: "Education First",
-                  desc: "Before risking capital, understand mechanics. We break down market structure, liquidity voids, and institutional psychology so you make informed, confident choices.",
-                  tagline: "Foundation over speculation",
-                },
-                {
-                  num: "02",
-                  title: "Methodical Discipline",
-                  desc: "A system is useless without the execution discipline to follow it. We emphasize emotional detachment, clear trade journals, and systematic consistency over impulsive hype.",
-                  tagline: "Plan the trade, trade the plan",
-                },
-                {
-                  num: "03",
-                  title: "Capital Preservation",
-                  desc: "Longevity is the true competitive edge in Forex. We prioritize asymmetric risk-to-reward ratios, portfolio defense protocols, and strict drawdown controls before offense.",
-                  tagline: "Protect capital at all times",
-                },
-              ].map((pillar, idx) => (
+              {t.philosophy.pillars.map((pillar, idx) => (
                 <motion.div
                   key={pillar.num}
                   initial={prefersReduced ? undefined : { opacity: 0, y: 28 }}
@@ -665,51 +634,21 @@ export default function Home() {
             >
               <div>
                 <span className="text-xs font-semibold tracking-widest text-brand-gold uppercase">
-                  What We Offer
+                  {t.services.tag}
                 </span>
                 <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold text-white mt-2">
-                  Everything starts with knowledge.
+                  {t.services.title}
                 </h2>
               </div>
               <p className="mt-4 md:mt-0 text-brand-slateText max-w-md text-sm sm:text-base">
-                Structured services built to elevate market comprehension from initial foundations to
-                advanced institutional trade execution.
+                {t.services.subtitle}
               </p>
             </motion.div>
 
-            {/* 4-Card Service Grid with Hover Spring Elevation */}
+            {/* 4-Card Service Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              {[
-                {
-                  icon: GraduationCap,
-                  title: "Trading Education",
-                  desc: "Structured modules starting from market fundamentals, forex mechanics, price action reading, and smart money concepts.",
-                  bullets: ["Complete beginner to pro track", "Institutional orderflow dynamics"],
-                  cta: "Explore Syllabus →",
-                },
-                {
-                  icon: BarChart3,
-                  title: "Market Analysis",
-                  desc: "Daily and weekly institutional markups across major currency pairs, indices, and gold with macroeconomic context.",
-                  bullets: ["Daily London / NY open briefings", "Key liquidity pool mappings"],
-                  cta: "Sample Breakdown →",
-                },
-                {
-                  icon: Zap,
-                  title: "High-Conviction Signals",
-                  desc: "Curated opportunities delivered directly via Telegram with exact entry conditions, stop losses, and multi-tier take profits.",
-                  bullets: ["Precise entry & invalidation", "Live execution alerts"],
-                  cta: "Signal Protocol →",
-                },
-                {
-                  icon: ShieldCheck,
-                  title: "Risk Management",
-                  desc: "Frameworks designed to shield trading balance against volatile market drawdowns with mathematical precision.",
-                  bullets: ["Position sizing formulas", "Maximum drawdown safeguards"],
-                  cta: "Risk Framework →",
-                },
-              ].map((service, index) => {
-                const Icon = service.icon;
+              {t.services.items.map((service, index) => {
+                const Icon = serviceIcons[index] || GraduationCap;
                 return (
                   <motion.div
                     key={service.title}
@@ -770,14 +709,13 @@ export default function Home() {
               transition={{ duration: 0.6 }}
             >
               <span className="text-xs font-semibold tracking-widest text-brand-gold uppercase">
-                Actionable Intel
+                {t.analysis.tag}
               </span>
               <h2 className="font-display text-3xl sm:text-4xl font-bold text-white mt-2">
-                Understand the Market Beyond the Numbers.
+                {t.analysis.title}
               </h2>
               <p className="text-xs sm:text-sm text-brand-slateText mt-3">
-                Illustrative market breakdown — structured analysis identifying high-probability
-                institutional footprints.
+                {t.analysis.subtitle}
               </p>
             </motion.div>
 
@@ -792,7 +730,7 @@ export default function Home() {
               {/* Terminal Toolbar */}
               <div className="bg-brand-dark px-6 py-4 border-b border-brand-border flex flex-wrap items-center justify-between gap-4">
                 <div className="flex items-center gap-4">
-                  <span className="font-mono text-sm font-bold text-white">XAUUSD / GOLD</span>
+                  <span className="font-mono text-sm font-bold text-white">{t.analysis.asset}</span>
                   {/* Interactive Timeframe tabs */}
                   <div className="flex items-center gap-1 bg-brand-void/80 p-1 rounded-lg border border-brand-border/50">
                     {["H1", "M15", "M5"].map((tf) => (
@@ -810,12 +748,12 @@ export default function Home() {
                     ))}
                   </div>
                   <span className="text-xs text-brand-slateText font-mono hidden sm:inline">
-                    TREND: BULLISH BIAS
+                    {t.analysis.trend}
                   </span>
                 </div>
                 <div className="flex items-center gap-3 text-xs font-mono">
                   <span className="text-brand-slateText">
-                    Fair Value Gap [FVG]: <strong className="text-brand-gold">ACTIVE</strong>
+                    {t.analysis.fvg} <strong className="text-brand-gold">{t.analysis.active}</strong>
                   </span>
                   <span className="w-2 h-2 rounded-full bg-brand-success animate-pulse" />
                 </div>
@@ -826,8 +764,8 @@ export default function Home() {
                 <div className="lg:col-span-2 space-y-4">
                   <div className="bg-brand-dark/80 rounded-xl p-5 border border-brand-border/70 relative">
                     <div className="flex justify-between items-center text-xs font-mono text-brand-slateText mb-4">
-                      <span>SWING ANALYSIS (LONDON HIGH SWEEP)</span>
-                      <span className="text-brand-goldLight font-bold">2,384.40 → 2,418.00</span>
+                      <span>{t.analysis.swingHigh}</span>
+                      <span className="text-brand-goldLight font-bold dir-ltr">2,384.40 → 2,418.00</span>
                     </div>
 
                     {/* Graphic representation */}
@@ -838,15 +776,14 @@ export default function Home() {
                           className="w-12 h-32 border-l border-r border-brand-gold/40 bg-brand-gold/5 flex flex-col justify-center items-center text-[10px] font-mono text-brand-gold"
                           whileHover={{ scale: 1.05 }}
                         >
-                          <span>ORDER</span>
-                          <span>BLOCK</span>
+                          <span>{t.analysis.orderBlock}</span>
                         </motion.div>
                         <div className="h-[1px] w-full bg-gradient-to-r from-transparent via-brand-gold to-transparent opacity-60" />
                         <motion.div
-                          className="w-20 h-24 border border-brand-success/50 bg-brand-success/10 rounded flex items-center justify-center text-[10px] font-mono text-brand-success text-center px-1"
+                          className="w-24 h-24 border border-brand-success/50 bg-brand-success/10 rounded flex items-center justify-center text-[10px] font-mono text-brand-success text-center px-1"
                           whileHover={{ scale: 1.05 }}
                         >
-                          TARGET LIQUIDITY
+                          {t.analysis.targetLiquidity}
                         </motion.div>
                       </div>
 
@@ -856,25 +793,25 @@ export default function Home() {
                         transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
                       >
                         <span className="text-xs font-mono uppercase bg-brand-void/90 px-3 py-1.5 rounded-full border border-brand-border text-brand-slateText shadow-md">
-                          Clean Liquidity Sweep + Institutional Rejection
+                          {t.analysis.sweepBadge}
                         </span>
                       </motion.div>
                     </div>
 
                     <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-4 text-xs font-mono">
                       {[
-                        { label: "ENTRY ZONE", val: "2,392.20", color: "text-white" },
-                        { label: "INVALIDATION (SL)", val: "2,386.50", color: "text-red-400" },
-                        { label: "FIRST TARGET", val: "2,408.00", color: "text-brand-success" },
-                        { label: "FINAL TARGET", val: "2,424.00", color: "text-brand-goldLight" },
-                      ].map((item, idx) => (
+                        { label: t.analysis.entryZone, val: "2,392.20", color: "text-white" },
+                        { label: t.analysis.sl, val: "2,386.50", color: "text-red-400" },
+                        { label: t.analysis.tp1, val: "2,408.00", color: "text-brand-success" },
+                        { label: t.analysis.tp2, val: "2,424.00", color: "text-brand-goldLight" },
+                      ].map((item) => (
                         <motion.div
                           key={item.label}
                           className="p-2.5 rounded bg-brand-void border border-brand-border/50 hover:border-brand-gold/40 transition-colors"
                           whileHover={{ scale: 1.02 }}
                         >
                           <span className="text-brand-slateText block text-[10px]">{item.label}</span>
-                          <span className={`font-bold ${item.color}`}>{item.val}</span>
+                          <span className={`font-bold dir-ltr ${item.color}`}>{item.val}</span>
                         </motion.div>
                       ))}
                     </div>
@@ -883,19 +820,17 @@ export default function Home() {
 
                 {/* Analysis Commentary Column with Confluence Gauge Animation */}
                 <div className="bg-brand-dark/90 p-6 rounded-xl border border-brand-border space-y-4">
-                  <h4 className="font-display font-bold text-white text-base">Key Technical Takeaway</h4>
+                  <h4 className="font-display font-bold text-white text-base">{t.analysis.takeawayTitle}</h4>
                   <p className="text-xs text-brand-slateText leading-relaxed">
-                    Liquidity resting above previous Asian session highs was swept cleanly during
-                    pre-London volatility. Price mitigated the 62% Fibonacci discount zone with immediate
-                    institutional reaction.
+                    {t.analysis.takeawayText}
                   </p>
 
                   <div className="space-y-3 pt-2 border-t border-brand-border/60 text-xs">
                     {/* Animated Confluence Meter */}
                     <div>
                       <div className="flex items-center justify-between text-brand-slateText mb-1.5">
-                        <span>Confluence Score:</span>
-                        <span className="font-bold text-brand-gold">9.2 / 10</span>
+                        <span>{t.analysis.confluence}</span>
+                        <span className="font-bold text-brand-gold dir-ltr">9.2 / 10</span>
                       </div>
                       <div className="h-1.5 w-full bg-brand-card rounded-full overflow-hidden">
                         <motion.div
@@ -909,12 +844,12 @@ export default function Home() {
                     </div>
 
                     <div className="flex items-center justify-between text-brand-slateText">
-                      <span>Calculated Risk:</span>
-                      <span className="font-bold text-white">1% Portfolio Default</span>
+                      <span>{t.analysis.risk}</span>
+                      <span className="font-bold text-white">{t.analysis.riskVal}</span>
                     </div>
                     <div className="flex items-center justify-between text-brand-slateText">
-                      <span>Execution Channel:</span>
-                      <span className="font-bold text-brand-goldLight">PRINTFOREX Telegram</span>
+                      <span>{t.analysis.channel}</span>
+                      <span className="font-bold text-brand-goldLight">{t.analysis.channelVal}</span>
                     </div>
                   </div>
 
@@ -924,7 +859,7 @@ export default function Home() {
                     whileHover={{ scale: 1.02 }}
                     whileTap={{ scale: 0.98 }}
                   >
-                    Access Daily Full Analysis
+                    {t.analysis.cta}
                   </motion.button>
                 </div>
               </div>
@@ -948,49 +883,19 @@ export default function Home() {
               transition={{ duration: 0.6 }}
             >
               <span className="text-xs font-semibold tracking-widest text-brand-gold uppercase">
-                Methodology
+                {t.methodology.tag}
               </span>
               <h2 className="font-display text-3xl sm:text-4xl lg:text-5xl font-bold text-white mt-2">
-                A structured approach to trading.
+                {t.methodology.title}
               </h2>
               <p className="mt-3 text-brand-slateText text-sm sm:text-base">
-                From first principles to routine execution, every member follows a clear, repeatable
-                4-phase framework.
+                {t.methodology.subtitle}
               </p>
             </motion.div>
 
-            {/* 4 Step Timeline with Animated Sequence */}
+            {/* 4 Step Timeline */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 relative">
-              {[
-                {
-                  num: "01",
-                  phase: "Phase 1",
-                  title: "Learn",
-                  desc: "Build an institutional foundation. Master terminology, pip calculus, order types, currency correlation, and market participants.",
-                  action: "Knowledge Acquisition →",
-                },
-                {
-                  num: "02",
-                  phase: "Phase 2",
-                  title: "Analyse",
-                  desc: "Decode market conditions before taking action. Map higher timeframe direction, mark key supply/demand imbalances and macro news releases.",
-                  action: "Structural Insight →",
-                },
-                {
-                  num: "03",
-                  phase: "Phase 3",
-                  title: "Plan",
-                  desc: "Formulate strict scenario plans. Define exact entry triggers, stop-loss invalidation levels, multi-target take profits, and position sizes.",
-                  action: "Tactical Setup →",
-                },
-                {
-                  num: "04",
-                  phase: "Phase 4",
-                  title: "Manage",
-                  desc: "Control the open position without emotion. Scale partials at predetermined targets, trail stops, and conduct honest trade reviews in your journal.",
-                  action: "Capital Evolution →",
-                },
-              ].map((step, idx) => (
+              {t.methodology.steps.map((step, idx) => (
                 <motion.div
                   key={step.num}
                   initial={prefersReduced ? undefined : { opacity: 0, y: 24 }}
@@ -1014,7 +919,7 @@ export default function Home() {
                       {step.desc}
                     </p>
                   </div>
-                  <div className="mt-6 pt-3 border-t border-brand-border/40 text-[11px] font-mono text-brand-gold group-hover:translate-x-1 transition-transform duration-200">
+                  <div className="mt-6 pt-3 border-t border-brand-border/40 text-[11px] font-mono text-brand-gold group-hover:translate-x-1 rtl:group-hover:-translate-x-1 transition-transform duration-200">
                     {step.action}
                   </div>
                 </motion.div>
@@ -1048,18 +953,16 @@ export default function Home() {
                     <svg className="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24">
                       <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.446 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12l-6.871 4.326-2.962-.924c-.643-.204-.657-.643.136-.953l11.57-4.461c.535-.194 1.006.128.832.925z" />
                     </svg>
-                    <span>Active Telegram Hub</span>
+                    <span>{t.community.hubTag}</span>
                   </div>
 
                   <h2 className="font-display text-3xl sm:text-5xl font-bold text-white tracking-tight">
-                    Learn Together. <br />
-                    <span className="gold-gradient-text">Grow Through Knowledge.</span>
+                    {t.community.titleLine1} <br />
+                    <span className="gold-gradient-text">{t.community.titleLine2}</span>
                   </h2>
 
                   <p className="text-sm sm:text-base text-brand-slateText max-w-xl leading-relaxed">
-                    Connect with passionate traders who share technical breakdowns, macroeconomic
-                    forecasts, and disciplined habits. Get direct access to signals, educational drops,
-                    and Q&amp;A sessions.
+                    {t.community.desc}
                   </p>
 
                   <div className="flex flex-col sm:flex-row gap-4 pt-2">
@@ -1072,7 +975,7 @@ export default function Home() {
                       <svg className="w-5 h-5 text-black" fill="currentColor" viewBox="0 0 24 24">
                         <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.446 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12l-6.871 4.326-2.962-.924c-.643-.204-.657-.643.136-.953l11.57-4.461c.535-.194 1.006.128.832.925z" />
                       </svg>
-                      <span>Join Our Community</span>
+                      <span>{t.community.ctaTelegram}</span>
                     </motion.button>
 
                     <motion.a
@@ -1086,7 +989,7 @@ export default function Home() {
                       <svg className="w-5 h-5 text-green-400" fill="currentColor" viewBox="0 0 24 24">
                         <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z" />
                       </svg>
-                      <span>Chat on WhatsApp</span>
+                      <span>{t.community.ctaWhatsApp}</span>
                     </motion.a>
                   </div>
                 </div>
@@ -1105,9 +1008,9 @@ export default function Home() {
                           </svg>
                         </div>
                         <div>
-                          <div className="font-bold text-white text-sm">PRINTFOREX VIP Channel</div>
+                          <div className="font-bold text-white text-sm">{t.community.channelName}</div>
                           <div className="text-[11px] text-brand-slateText font-mono">
-                            Members Worldwide
+                            {t.community.channelSub}
                           </div>
                         </div>
                       </div>
@@ -1121,12 +1024,11 @@ export default function Home() {
                         whileHover={{ scale: 1.015 }}
                       >
                         <div className="flex justify-between items-center text-[10px] text-brand-gold font-mono mb-1">
-                          <span>DAILY RECAP</span>
-                          <span>08:15 GMT</span>
+                          <span>{t.community.recapTag}</span>
+                          <span className="dir-ltr">08:15 GMT</span>
                         </div>
-                        <p className="text-white/90">
-                          EUR/USD reaction at 1.0895 order block reached TP1 (+42 pips). Move stop-loss to
-                          entry (breakeven). Let remaining volume run into New York session.
+                        <p className="text-white/90 leading-relaxed">
+                          {t.community.recapText}
                         </p>
                       </motion.div>
 
@@ -1135,20 +1037,19 @@ export default function Home() {
                         whileHover={{ scale: 1.015 }}
                       >
                         <div className="flex justify-between items-center text-[10px] text-brand-goldLight font-mono mb-1">
-                          <span>EDUCATIONAL DROP</span>
-                          <span>13:40 GMT</span>
+                          <span>{t.community.eduTag}</span>
+                          <span className="dir-ltr">13:40 GMT</span>
                         </div>
-                        <p className="text-white/90">
-                          New video walkthrough uploaded: &quot;Recognizing Premium vs. Discount Pricing
-                          in London Open Swings.&quot;
+                        <p className="text-white/90 leading-relaxed">
+                          {t.community.eduText}
                         </p>
                       </motion.div>
                     </div>
 
                     <div className="pt-2">
                       <div className="p-2.5 rounded-lg bg-brand-elevated border border-brand-border flex items-center justify-between text-xs font-mono text-brand-slateText">
-                        <span>Instant access on registration</span>
-                        <span className="text-brand-gold font-bold">100% Free</span>
+                        <span>{t.community.instantAccess}</span>
+                        <span className="text-brand-gold font-bold">{t.community.freeBadge}</span>
                       </div>
                     </div>
                   </TiltCard>
@@ -1174,20 +1075,19 @@ export default function Home() {
               transition={{ duration: 0.6 }}
             >
               <span className="text-xs font-semibold tracking-widest text-brand-gold uppercase">
-                Clarifications
+                {t.faq.tag}
               </span>
               <h2 className="font-display text-3xl sm:text-4xl font-bold text-white mt-2">
-                Frequently Asked Questions
+                {t.faq.title}
               </h2>
               <p className="mt-3 text-brand-slateText text-sm sm:text-base">
-                Transparent answers to everything you need to know about joining and learning with
-                PRINTFOREX.
+                {t.faq.subtitle}
               </p>
             </motion.div>
 
             {/* Accordion Container with AnimatePresence */}
             <div className="space-y-4" id="faq-accordion-group">
-              {faqs.map((faq, index) => {
+              {t.faq.items.map((faq, index) => {
                 const isOpen = openFaqIndex === index;
                 return (
                   <motion.div
@@ -1201,7 +1101,7 @@ export default function Home() {
                   >
                     <button
                       aria-expanded={isOpen}
-                      className="w-full px-6 py-5 text-left font-display font-semibold text-white flex justify-between items-center gap-4 focus:outline-none cursor-pointer"
+                      className="w-full px-6 py-5 text-start font-display font-semibold text-white flex justify-between items-center gap-4 focus:outline-none cursor-pointer"
                       onClick={() => toggleFaq(index)}
                       type="button"
                     >
@@ -1210,7 +1110,7 @@ export default function Home() {
                         animate={{ rotate: isOpen ? 180 : 0 }}
                         transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
                       >
-                        <ChevronDown className="w-5 h-5 text-brand-gold" />
+                        <ChevronDown className="w-5 h-5 text-brand-gold flex-shrink-0" />
                       </motion.div>
                     </button>
                     <AnimatePresence initial={false}>
@@ -1264,23 +1164,22 @@ export default function Home() {
               transition={{ duration: 0.65 }}
             >
               <span className="text-xs font-semibold tracking-widest text-brand-gold uppercase">
-                Start Your Journey
+                {t.finalCta.tag}
               </span>
               <h2 className="font-display text-3xl sm:text-5xl font-bold text-white mt-4 tracking-tight">
-                Ready to Take the Next Step?
+                {t.finalCta.title}
               </h2>
               <p className="mt-4 text-brand-slateText text-base sm:text-lg max-w-2xl mx-auto">
-                Discover our community, explore institutional services, and connect with fellow traders
-                committed to disciplined longevity.
+                {t.finalCta.subtitle}
               </p>
               <div className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
                 <motion.button
-                  className="w-full sm:w-auto px-8 py-4 rounded-xl gold-gradient-bg text-black font-bold text-base shadow-gold-sm hover:brightness-110 active:scale-95 transition cursor-pointer"
+                  className="w-full sm:w-auto px-8 py-4 rounded-xl gold-gradient-bg text-black font-bold text-base shadow-gold-sm hover:brightness-110 active:scale-95 transition cursor-pointer flex items-center justify-center gap-2"
                   onClick={openModal}
                   whileHover={{ scale: 1.03 }}
                   whileTap={{ scale: 0.97 }}
                 >
-                  Join Our Community →
+                  <span>{t.finalCta.ctaJoin}</span>
                 </motion.button>
                 <motion.a
                   className="w-full sm:w-auto px-8 py-4 rounded-xl bg-brand-elevated border border-brand-border hover:border-brand-gold/50 text-white font-medium text-base flex items-center justify-center gap-2.5 transition cursor-pointer"
@@ -1290,11 +1189,11 @@ export default function Home() {
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                 >
-                  <span>Talk to Us on WhatsApp</span>
+                  <span>{t.finalCta.ctaWhatsApp}</span>
                 </motion.a>
               </div>
               <p className="text-[11px] text-brand-slateText/70 font-mono mt-6">
-                Instant Access · No Credit Card Required · Active Global Community
+                {t.finalCta.guarantee}
               </p>
             </motion.div>
           </div>
@@ -1320,36 +1219,35 @@ export default function Home() {
                 </span>
               </div>
               <p className="text-xs text-brand-slateText max-w-sm leading-relaxed">
-                Trading education and community dedicated to empowering traders through disciplined
-                execution, rigorous risk management, and structural market literacy.
+                {t.footer.brandDesc}
               </p>
-              <div className="text-xs font-mono text-brand-gold">Think Beyond the Market.</div>
+              <div className="text-xs font-mono text-brand-gold">{t.footer.motto}</div>
             </div>
 
             {/* Links Column 1: Ecosystem */}
             <div>
               <h4 className="font-display font-semibold text-white text-xs uppercase tracking-wider mb-4">
-                Ecosystem
+                {t.footer.ecosystemTitle}
               </h4>
               <ul className="space-y-2.5 text-xs">
                 <li>
                   <a className="hover:text-brand-gold transition" href="#services">
-                    Trading Academy
+                    {t.footer.academy}
                   </a>
                 </li>
                 <li>
                   <a className="hover:text-brand-gold transition" href="#services">
-                    Market Analysis
+                    {t.footer.analysis}
                   </a>
                 </li>
                 <li>
                   <a className="hover:text-brand-gold transition" href="#services">
-                    High-Probability Signals
+                    {t.footer.signals}
                   </a>
                 </li>
                 <li>
                   <a className="hover:text-brand-gold transition" href="#services">
-                    Risk Architecture
+                    {t.footer.riskArch}
                   </a>
                 </li>
               </ul>
@@ -1358,12 +1256,12 @@ export default function Home() {
             {/* Links Column 2: Community */}
             <div>
               <h4 className="font-display font-semibold text-white text-xs uppercase tracking-wider mb-4">
-                Community
+                {t.footer.communityTitle}
               </h4>
               <ul className="space-y-2.5 text-xs">
                 <li>
                   <a className="hover:text-brand-gold transition" href="#community">
-                    Telegram VIP Channel
+                    {t.footer.vipTelegram}
                   </a>
                 </li>
                 <li>
@@ -1373,17 +1271,17 @@ export default function Home() {
                     rel="noopener noreferrer"
                     target="_blank"
                   >
-                    WhatsApp Concierge
+                    {t.footer.whatsappConcierge}
                   </a>
                 </li>
                 <li>
                   <a className="hover:text-brand-gold transition" href="#methodology">
-                    Our Methodology
+                    {t.footer.methodologyLink}
                   </a>
                 </li>
                 <li>
                   <a className="hover:text-brand-gold transition" href="#faq">
-                    FAQ Support
+                    {t.footer.faqLink}
                   </a>
                 </li>
               </ul>
@@ -1392,32 +1290,32 @@ export default function Home() {
             {/* Links Column 3: Legal & Security */}
             <div>
               <h4 className="font-display font-semibold text-white text-xs uppercase tracking-wider mb-4">
-                Compliance
+                {t.footer.complianceTitle}
               </h4>
               <ul className="space-y-2.5 text-xs">
                 <li>
                   <Link className="hover:text-brand-gold transition" href="/privacy">
-                    Privacy Policy
+                    {t.footer.privacy}
                   </Link>
                 </li>
                 <li>
                   <Link className="hover:text-brand-gold transition" href="/terms">
-                    Terms of Service
+                    {t.footer.terms}
                   </Link>
                 </li>
                 <li>
                   <Link className="hover:text-brand-gold transition" href="/risk-disclaimer">
-                    Risk Disclosure
+                    {t.footer.riskDisclosure}
                   </Link>
                 </li>
                 <li>
                   <Link className="hover:text-brand-gold transition" href="/risk-disclaimer">
-                    Affiliate Policy
+                    {t.footer.affiliatePolicy}
                   </Link>
                 </li>
                 <li>
                   <Link className="hover:text-brand-gold text-brand-slateText/60 transition" href="/admin">
-                    Espace Admin
+                    {t.footer.adminPortal}
                   </Link>
                 </li>
               </ul>
@@ -1427,19 +1325,12 @@ export default function Home() {
           {/* Regulatory Risk Disclaimer */}
           <div className="pt-8 border-t border-brand-border/40 text-[11px] leading-relaxed text-brand-slateText/70 space-y-3">
             <p>
-              <strong>High Risk Disclaimer:</strong> Foreign exchange trading (Forex) and CFDs carry a
-              high level of risk and may not be suitable for all investors. The high degree of leverage
-              can work against you as well as for you. Before deciding to trade foreign exchange, you
-              should carefully consider your investment objectives, level of experience, and risk appetite.
-              There is a possibility that you could sustain a loss of some or all of your initial
-              investment. PRINTFOREX provides strictly educational resources and market information;
-              nothing contained herein shall be construed as financial advice or an investment
-              recommendation.
+              <strong>{t.footer.riskNoticeTitle}</strong> {t.footer.riskNoticeText}
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-4 border-t border-brand-border/20 text-xs">
-              <div>© 2026 PRINTFOREX. All rights reserved.</div>
+              <div>{t.footer.rights}</div>
               <div className="font-mono text-[10px] text-brand-slateText/60">
-                DISCIPLINE · KNOWLEDGE · INTEGRITY
+                {t.footer.values}
               </div>
             </div>
           </div>
@@ -1475,7 +1366,7 @@ export default function Home() {
               {/* Close Button */}
               <button
                 aria-label="Close Modal"
-                className="absolute top-4 right-4 z-20 w-8 h-8 rounded-full bg-brand-elevated border border-brand-border text-brand-slateText hover:text-white flex items-center justify-center transition cursor-pointer"
+                className={`absolute top-4 ${isRtl ? "left-4" : "right-4"} z-20 w-8 h-8 rounded-full bg-brand-elevated border border-brand-border text-brand-slateText hover:text-white flex items-center justify-center transition cursor-pointer`}
                 onClick={closeModal}
               >
                 <X className="w-4 h-4" />
@@ -1493,10 +1384,10 @@ export default function Home() {
                         </span>
                       </div>
                       <h3 className="font-display text-2xl font-bold text-white" id="modal-headline">
-                        Join Our Community
+                        {t.modal.title}
                       </h3>
                       <p className="text-xs sm:text-sm text-brand-slateText mt-1">
-                        Tell us a little about yourself and become part of the PRINTFOREX trading community.
+                        {t.modal.subtitle}
                       </p>
                     </div>
 
@@ -1512,12 +1403,12 @@ export default function Home() {
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
                           <label className="block font-medium text-white mb-1" htmlFor="fullName">
-                            Full Name <span className="text-brand-gold">*</span>
+                            {t.modal.fullName} <span className="text-brand-gold">*</span>
                           </label>
                           <input
                             className="w-full rounded-lg bg-brand-card border border-brand-border text-white text-xs px-3.5 py-2.5 focus:border-brand-gold focus:ring-1 focus:ring-brand-gold outline-none transition"
                             id="fullName"
-                            placeholder="e.g. John Doe"
+                            placeholder={t.modal.fullNamePlaceholder}
                             required
                             type="text"
                             value={formData.fullName}
@@ -1526,12 +1417,12 @@ export default function Home() {
                         </div>
                         <div>
                           <label className="block font-medium text-white mb-1" htmlFor="email">
-                            Email Address <span className="text-brand-gold">*</span>
+                            {t.modal.email} <span className="text-brand-gold">*</span>
                           </label>
                           <input
-                            className="w-full rounded-lg bg-brand-card border border-brand-border text-white text-xs px-3.5 py-2.5 focus:border-brand-gold focus:ring-1 focus:ring-brand-gold outline-none transition"
+                            className="w-full rounded-lg bg-brand-card border border-brand-border text-white text-xs px-3.5 py-2.5 focus:border-brand-gold focus:ring-1 focus:ring-brand-gold outline-none transition dir-ltr"
                             id="email"
-                            placeholder="name@example.com"
+                            placeholder={t.modal.emailPlaceholder}
                             required
                             type="email"
                             value={formData.email}
@@ -1544,7 +1435,7 @@ export default function Home() {
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
                           <label className="block font-medium text-white mb-1" htmlFor="age">
-                            Age <span className="text-brand-gold">*</span>
+                            {t.modal.age} <span className="text-brand-gold">*</span>
                           </label>
                           <input
                             className="w-full rounded-lg bg-brand-card border border-brand-border text-white text-xs px-3.5 py-2.5 focus:border-brand-gold focus:ring-1 focus:ring-brand-gold outline-none transition"
@@ -1560,10 +1451,10 @@ export default function Home() {
                         </div>
                         <div>
                           <label className="block font-medium text-white mb-1" htmlFor="phone">
-                            Phone Number <span className="text-brand-gold">*</span>
+                            {t.modal.phone} <span className="text-brand-gold">*</span>
                           </label>
                           <input
-                            className="w-full rounded-lg bg-brand-card border border-brand-border text-white text-xs px-3.5 py-2.5 focus:border-brand-gold focus:ring-1 focus:ring-brand-gold outline-none transition"
+                            className="w-full rounded-lg bg-brand-card border border-brand-border text-white text-xs px-3.5 py-2.5 focus:border-brand-gold focus:ring-1 focus:ring-brand-gold outline-none transition dir-ltr"
                             id="phone"
                             placeholder="+1 (555) 000-0000"
                             required
@@ -1578,12 +1469,12 @@ export default function Home() {
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
                           <label className="block font-medium text-white mb-1" htmlFor="city">
-                            City <span className="text-brand-gold">*</span>
+                            {t.modal.city} <span className="text-brand-gold">*</span>
                           </label>
                           <input
                             className="w-full rounded-lg bg-brand-card border border-brand-border text-white text-xs px-3.5 py-2.5 focus:border-brand-gold focus:ring-1 focus:ring-brand-gold outline-none transition"
                             id="city"
-                            placeholder="Your City"
+                            placeholder={t.modal.cityPlaceholder}
                             required
                             type="text"
                             value={formData.city}
@@ -1592,7 +1483,7 @@ export default function Home() {
                         </div>
                         <div>
                           <label className="block font-medium text-white mb-1" htmlFor="country">
-                            Country <span className="text-brand-gold">*</span>
+                            {t.modal.country} <span className="text-brand-gold">*</span>
                           </label>
                           <select
                             className="w-full rounded-lg bg-brand-card border border-brand-border text-white text-xs px-3.5 py-2.5 focus:border-brand-gold focus:ring-1 focus:ring-brand-gold outline-none transition cursor-pointer"
@@ -1602,17 +1493,21 @@ export default function Home() {
                             onChange={(e) => setFormData({ ...formData, country: e.target.value })}
                           >
                             <option disabled value="">
-                              Select country
+                              {t.modal.countrySelect}
                             </option>
-                            <option value="United States">United States</option>
-                            <option value="United Kingdom">United Kingdom</option>
-                            <option value="France">France</option>
-                            <option value="Morocco">Morocco</option>
-                            <option value="United Arab Emirates">United Arab Emirates</option>
-                            <option value="Canada">Canada</option>
-                            <option value="Germany">Germany</option>
-                            <option value="Switzerland">Switzerland</option>
-                            <option value="Other">Other Country</option>
+                            <option value="United States">{t.modal.countries.us}</option>
+                            <option value="United Kingdom">{t.modal.countries.uk}</option>
+                            <option value="France">{t.modal.countries.fr}</option>
+                            <option value="Morocco">{t.modal.countries.ma}</option>
+                            <option value="United Arab Emirates">{t.modal.countries.ae}</option>
+                            <option value="Saudi Arabia">{t.modal.countries.sa}</option>
+                            <option value="Qatar">{t.modal.countries.qa}</option>
+                            <option value="Algeria">{t.modal.countries.dz}</option>
+                            <option value="Tunisia">{t.modal.countries.tn}</option>
+                            <option value="Canada">{t.modal.countries.ca}</option>
+                            <option value="Germany">{t.modal.countries.de}</option>
+                            <option value="Switzerland">{t.modal.countries.ch}</option>
+                            <option value="Other">{t.modal.countries.other}</option>
                           </select>
                         </div>
                       </div>
@@ -1620,14 +1515,30 @@ export default function Home() {
                       {/* Experience Level Selectors */}
                       <div>
                         <label className="block font-medium text-white mb-2">
-                          Trading Experience Level <span className="text-brand-gold">*</span>
+                          {t.modal.experienceTitle} <span className="text-brand-gold">*</span>
                         </label>
                         <div className="grid grid-cols-2 gap-2">
                           {[
-                            { val: "Beginner", title: "Beginner", desc: "Just getting started" },
-                            { val: "Intermediate", title: "Intermediate", desc: "Some live trades" },
-                            { val: "Advanced", title: "Advanced", desc: "Active consistency" },
-                            { val: "Professional", title: "Professional", desc: "Prop firm / full-time" },
+                            {
+                              val: "Beginner",
+                              title: t.modal.experiences.beginner.title,
+                              desc: t.modal.experiences.beginner.desc,
+                            },
+                            {
+                              val: "Intermediate",
+                              title: t.modal.experiences.intermediate.title,
+                              desc: t.modal.experiences.intermediate.desc,
+                            },
+                            {
+                              val: "Advanced",
+                              title: t.modal.experiences.advanced.title,
+                              desc: t.modal.experiences.advanced.desc,
+                            },
+                            {
+                              val: "Professional",
+                              title: t.modal.experiences.professional.title,
+                              desc: t.modal.experiences.professional.desc,
+                            },
                           ].map((item) => (
                             <label
                               key={item.val}
@@ -1645,7 +1556,7 @@ export default function Home() {
                                 value={item.val}
                                 onChange={() => setFormData({ ...formData, experience: item.val })}
                               />
-                              <div className="ml-2.5">
+                              <div className="mx-2.5">
                                 <span className="block text-white font-medium">{item.title}</span>
                                 <span className="block text-[10px] text-brand-slateText">{item.desc}</span>
                               </div>
@@ -1668,12 +1579,11 @@ export default function Home() {
                           className="text-[11px] text-brand-slateText leading-tight cursor-pointer"
                           htmlFor="consent"
                         >
-                          I agree to the{" "}
+                          {t.modal.consentText}{" "}
                           <Link className="text-brand-goldLight underline" href="/privacy">
-                            Privacy Policy
-                          </Link>{" "}
-                          and consent to PRINTFOREX processing my contact info to manage community
-                          registration and direct updates. *
+                            {t.modal.consentLink}
+                          </Link>
+                          {" "}*
                         </label>
                       </div>
 
@@ -1690,12 +1600,12 @@ export default function Home() {
                           {isSubmitting ? (
                             <>
                               <Loader2 className="w-4 h-4 text-black animate-spin" />
-                              <span>Processing Registration...</span>
+                              <span>{t.modal.submitting}</span>
                             </>
                           ) : (
                             <>
-                              <span>Join Our Community</span>
-                              <ArrowRight className="w-4 h-4 text-black" />
+                              <span>{t.modal.submit}</span>
+                              <ArrowIcon className="w-4 h-4 text-black" />
                             </>
                           )}
                         </motion.button>
@@ -1714,11 +1624,10 @@ export default function Home() {
                       <Check className="w-8 h-8" />
                     </motion.div>
                     <h3 className="font-display text-2xl sm:text-3xl font-bold text-white">
-                      Welcome to PRINTFOREX!
+                      {t.modal.successTitle}
                     </h3>
                     <p className="text-xs sm:text-sm text-brand-slateText max-w-sm mx-auto mt-2 leading-relaxed">
-                      Your registration has been successfully confirmed. You are now cleared to join our
-                      private Telegram channel and access analysis setups.
+                      {t.modal.successDesc}
                     </p>
                     <div className="mt-8 space-y-3">
                       <motion.a
@@ -1732,7 +1641,7 @@ export default function Home() {
                         <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
                           <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.446 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12l-6.871 4.326-2.962-.924c-.643-.204-.657-.643.136-.953l11.57-4.461c.535-.194 1.006.128.832.925z" />
                         </svg>
-                        <span>Join Our Telegram Community →</span>
+                        <span>{t.modal.successTelegramCta}</span>
                       </motion.a>
                       <motion.a
                         className="w-full py-3 px-6 rounded-xl bg-brand-elevated border border-brand-border text-white text-xs font-semibold hover:border-brand-gold/40 flex items-center justify-center gap-2 transition cursor-pointer"
@@ -1742,14 +1651,14 @@ export default function Home() {
                         whileHover={{ scale: 1.02 }}
                         whileTap={{ scale: 0.98 }}
                       >
-                        <span>Talk to Our Team on WhatsApp</span>
+                        <span>{t.modal.successWhatsAppCta}</span>
                       </motion.a>
                     </div>
                     <button
                       className="mt-6 text-xs text-brand-slateText hover:text-white underline transition cursor-pointer"
                       onClick={closeModal}
                     >
-                      Close Window
+                      {t.modal.closeBtn}
                     </button>
                   </div>
                 )}

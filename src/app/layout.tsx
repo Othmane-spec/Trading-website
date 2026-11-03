@@ -3,6 +3,7 @@ import { Inter, Space_Grotesk } from "next/font/google";
 import "./globals.css";
 import { site } from "@/config/site";
 import { WhatsAppButton } from "@/components/ui/WhatsAppButton";
+import { LanguageProvider } from "@/context/LanguageContext";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -37,8 +38,10 @@ export default function RootLayout({
         className={`${inter.variable} ${space.variable} bg-brand-void text-[#F5F5F2] font-sans antialiased selection:bg-brand-gold selection:text-black overflow-x-hidden custom-scrollbar`}
         suppressHydrationWarning
       >
-        {children}
-        <WhatsAppButton />
+        <LanguageProvider>
+          {children}
+          <WhatsAppButton />
+        </LanguageProvider>
       </body>
     </html>
   );

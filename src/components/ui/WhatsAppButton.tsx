@@ -1,39 +1,43 @@
 "use client";
 
 import { site } from "@/config/site";
+import { useLanguage } from "@/context/LanguageContext";
 
 interface WhatsAppButtonProps {
   phoneNumber?: string;
-  message?: string;
   className?: string;
 }
 
 export function WhatsAppButton({
   phoneNumber = site.whatsapp?.phoneNumber || "+1234567890",
-  message = site.whatsapp?.message || "Hello PRINTFOREX, I am interested in joining your community.",
   className = "",
 }: WhatsAppButtonProps) {
+  const { t, isRtl } = useLanguage();
+
   // Normalize phone number: remove non-digits
   const cleanPhone = phoneNumber.replace(/[^0-9]/g, "");
-  const encodedMessage = encodeURIComponent(message);
+  const defaultMessage = t?.whatsappButton?.defaultMessage || "Hello PRINTFOREX, I am interested in joining your community.";
+  const encodedMessage = encodeURIComponent(defaultMessage);
   const whatsappUrl = `https://wa.me/${cleanPhone}?text=${encodedMessage}`;
 
   return (
     <aside
       aria-label="Direct WhatsApp Contact"
-      className={`fixed bottom-6 right-6 z-40 flex items-center gap-3 ${className}`}
+      className={`fixed bottom-6 ${isRtl ? "left-6" : "right-6"} z-40 flex items-center gap-3 ${className}`}
       data-purpose="floating-support-action"
     >
       {/* Context tooltip pill (Desktop only) */}
-      <div className="hidden lg:flex items-center bg-brand-dark/95 border border-brand-gold/40 shadow-xl px-3 py-1.5 rounded-full backdrop-blur-md">
+      <div className={`hidden lg:flex items-center bg-brand-dark/95 border border-brand-gold/40 shadow-xl px-3 py-1.5 rounded-full backdrop-blur-md ${isRtl ? "order-2" : "order-1"}`}>
         <span className="w-2 h-2 rounded-full bg-emerald-500 mr-2 animate-ping" />
-        <span className="text-[11px] font-medium text-white">Direct WhatsApp Concierge</span>
+        <span className="text-[11px] font-medium text-white">
+          {t?.whatsappButton?.tooltip || "Direct WhatsApp Concierge"}
+        </span>
       </div>
 
       {/* WhatsApp Pulse Action Button */}
       <a
         aria-label="Direct Chat with PRINTFOREX Support on WhatsApp (opens in new tab)"
-        className="w-14 h-14 rounded-full bg-emerald-500 hover:bg-emerald-400 text-white flex items-center justify-center shadow-lg hover:shadow-emerald-500/40 hover:scale-105 active:scale-95 transition-all duration-300 relative group cursor-pointer"
+        className={`w-14 h-14 rounded-full bg-emerald-500 hover:bg-emerald-400 text-white flex items-center justify-center shadow-lg hover:shadow-emerald-500/40 hover:scale-105 active:scale-95 transition-all duration-300 relative group cursor-pointer ${isRtl ? "order-1" : "order-2"}`}
         href={whatsappUrl}
         target="_blank"
         rel="noopener noreferrer"
